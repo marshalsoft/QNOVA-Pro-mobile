@@ -1,0 +1,292 @@
+import { StyleSheet } from 'react-native';
+import { COLOURS, DEVICE, FONTFAMILY } from './constants';
+const AppStyles = StyleSheet.create({
+  indicatorWrapper:{
+    width:30,
+    height:30,
+    backgroundColor:COLOURS.purple,
+    borderColor:COLOURS.purple,
+    borderWidth:2,
+    borderRadius:30,
+  },
+  activeIndicator:{
+    width:"100%",
+    height:"100%",
+    borderRadius:30,
+    justifyContent:"center",
+    alignItems:"center",
+    borderColor:COLOURS.white,
+    borderWidth:2
+  },
+  inactiveIndicator:{
+    width:"100%",
+    height:"100%",
+    borderRadius:30,
+    justifyContent:"center",
+    alignItems:"center",
+    borderColor:COLOURS.purple,
+    borderWidth:2
+  },
+  flatListWrapper: {
+    backgroundColor:COLOURS.white,
+    position: 'absolute',
+    minHeight: 200,
+    maxHeight: DEVICE.height - 180,
+    bottom: 0,
+    width: '100%',
+    borderTopRightRadius:30,
+    borderTopLeftRadius:30,
+    flexDirection:"column",
+    paddingBottom:40
+  },
+  container: {
+    flex: 1,
+  },
+  topBar: {
+    flexDirection: 'row',
+    padding: 10,
+    alignContent: 'center',
+    paddingHorizontal: 20,
+  },
+  navBar: {
+    flexDirection: 'row',
+    height:40
+  },
+  purpleBtn: {
+    width: "100%",
+    flexDirection:"row",
+    alignItems: 'center',
+    justifyContent:"center",
+    height: 50,
+    backgroundColor: COLOURS.purple,
+    borderRadius: 8,
+    shadowColor: '#00000012',
+    shadowOpacity: 0.1,
+    paddingHorizontal: 12,
+    gap: 8,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  whiteBtn: {
+    width: "100%",
+    flexDirection:"row",
+    alignItems: 'center',
+    justifyContent:"center",
+    height: 50,
+    backgroundColor: COLOURS.white,
+    borderRadius: 8,
+    shadowColor: '#00000012',
+    shadowOpacity: 0.1,
+    gap: 8,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  outlineBtn:{
+    width: "100%",
+    flexDirection:"row",
+    alignItems: 'center',
+    justifyContent:"center",
+    height: 50,
+    borderColor: COLOURS.purple,
+    borderWidth: 2,
+    borderRadius: 8,
+    shadowColor: '#00000012',
+    shadowOpacity: 0.1,
+    gap: 8,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowRadius: 4,
+    elevation: 4,
+
+  },
+  grayBtn: {
+    width: "100%",
+    flexDirection:"row",
+    alignItems: 'center',
+    justifyContent:"center",
+    height: 50,
+    backgroundColor: COLOURS.gray,
+    borderRadius: 8,
+    shadowColor: '#00000012',
+    shadowOpacity: 0.1,
+    gap: 8,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  inactiveBtn: {
+    width: "100%",
+    flexDirection:"row",
+    alignItems: 'center',
+    justifyContent:"center",
+    height: 50,
+    backgroundColor:COLOURS.inActive,
+    borderRadius: 8,
+  },
+  blackText: {
+    color: COLOURS.black,
+    fontSize: 18,
+    fontFamily: FONTFAMILY.INTER.normal,
+  },
+  whiteText: {
+    color: COLOURS.white,
+    fontSize: 18,
+    fontFamily: FONTFAMILY.INTER.normal,
+  },
+  btnText: {
+    color: COLOURS.black,
+    fontFamily: FONTFAMILY.INTER.medium,
+    fontSize: 16,
+  },
+  h1:{
+    color: COLOURS.h1,
+    fontFamily: FONTFAMILY.MONTSERRAT.extra,
+    fontSize: 30
+  },
+  subTitle:{
+    color: COLOURS.subTitle,
+    fontFamily:FONTFAMILY.MONTSERRAT.semiBold,
+    fontSize: 18
+  },
+  toastContainer:{
+    position:"absolute",
+    top:16,
+    borderRadius: 12,
+      backgroundColor: "#00A551",
+      minWidth:"50%",
+      alignSelf:"center",
+      flexDirection:'row',
+      minHeight:50,
+      padding:10,
+      alignItems:'center',
+      justifyContent:"center"
+   },
+   baseInputWrapper:{
+    borderRadius: 12,
+    overflow:"hidden",
+    backgroundColor:COLOURS.white,
+    flexDirection:"row",
+    alignItems:"center",
+    justifyContent:"center"
+   },
+   baseInputLabel:{
+    color: COLOURS.black,
+    fontFamily: FONTFAMILY.Baloo.normal,
+    fontSize: 8
+   },
+   baseInputText :{
+    color: COLOURS.black,
+    fontFamily: FONTFAMILY.MONTSERRAT.normal,
+    fontSize: 16
+   },
+   baseInput:{
+    textAlignVertical:'center',
+    height:56,
+    paddingHorizontal:13,
+    color:COLOURS.black,
+    fontSize:14,
+    fontFamily: FONTFAMILY.MONTSERRAT.normal,
+    flex:1
+  },
+  error:{
+    fontSize:12,
+    color:COLOURS.red,
+  },
+  passwordStrengthText:{
+    color:COLOURS.black,
+    fontSize:12,
+  },
+  passwordStrength:{
+    backgroundColor:COLOURS.gray50,
+    padding:2,
+    paddingHorizontal:10,
+    borderRadius:20,
+    marginVertical:8,
+    flexDirection:'row',
+    alignItems:'center',
+    marginHorizontal:5,
+    justifyContent:'flex-start',
+  },
+  passwordStrengthEnable:{
+    backgroundColor:COLOURS.lightGreen,
+    padding:2,
+    paddingHorizontal:10,
+    borderRadius:20,
+    marginVertical:8,
+    flexDirection:'row',
+    alignItems:'center',
+    marginHorizontal:5,
+  },
+  navBtn:{
+    flex:1,
+    flexDirection:"row",
+    alignItems:"center",
+    justifyContent:"center",
+    minHeight:80
+  },
+  topSectionTitleText:{
+    fontSize:24,
+    color: COLOURS.lightPurple,
+    fontFamily: FONTFAMILY.Baloo.bold,
+  },
+  topSectionSubTitleText:{
+    fontSize:16,
+    color: COLOURS.lightPurple,
+    fontFamily: FONTFAMILY.Baloo.bold,
+  },
+  card:{
+    minHeight: 50,
+    padding:10,
+    backgroundColor: COLOURS.white,
+    borderRadius: 20,
+    shadowColor:COLOURS.inActive,
+    shadowOpacity: 0.9,
+    flexDirection:"column",
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  modalContainer:{
+    width:DEVICE.width,
+    height:DEVICE.height,
+    backgroundColor:COLOURS.modalBackground,
+  },
+  flatListItem:{
+    paddingHorizontal:10,
+    paddingLeft:20,
+    flexDirection:'row',
+    height:50,
+    alignItems:'center',
+},
+  searchBarWrapper:{
+    margin:10,
+    width: '90%',
+    height:40,
+    borderWidth: 1,
+    borderColor:'#DADADA',
+    justifyContent:'center',
+    flexDirection:'row',
+    alignItems:'center',
+    paddingHorizontal:10,
+    backgroundColor: '#F3F5F7',
+    borderRadius: 25,
+},
+
+});
+export default AppStyles;

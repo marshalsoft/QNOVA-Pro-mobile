@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "412496855943",
+    "project_id": "qnova-pro",
+    "storage_bucket": "qnova-pro.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:412496855943:android:dec69bfcab01bc60204922",
+        "android_client_info": {
+          "package_name": "com.qnovapro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvleloHbdH3jaTRTbmQdNsoVmOtEfc8sI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

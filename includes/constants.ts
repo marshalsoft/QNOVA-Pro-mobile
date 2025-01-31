@@ -1,0 +1,171 @@
+import {Dimensions, Platform} from "react-native";
+export const BASEUrl = "https://qnova.opamfinancial.com/api/v1/";
+export const ROUTES = {
+introScreen:"splashscreen",
+loginScreen:"login",
+signUpScreen:"signup",
+dashboard:"dashboard",
+bvnVerification:"bvnVerification",
+chatScreen:"chatScreen",
+forgotPassword:"forgotPassword",
+forgotPasswordOTP:"forgotPasswordOTP",
+registeredBusiness:"registeredBusiness",
+unRegisteredBusiness:"unRegisteredBusiness",
+opamProtectConfirmPasswordScreen:"opamProtectConfirmPasswordScreen",
+opamProtectCreatePasswordScreen:"opamProtectCreatePasswordScreen",
+verifyMobileIndividualAccount:"VerifyMobileIndividualAccount",
+nameVerification:"nameVerification",
+opamProtectIntroScreen:"opamProtectIntroScreen",
+typOfBusiness:"typOfBusiness",
+successScreen:"successScreen",
+businessInfoScreen:"businessInfoScreen",
+personalInfoScreen:"personalInfoScreen",
+documentUpdateScreen:"documentUpdateScreen",
+formReviewScreen:"formReviewScreen",
+welcomeScreen:"welcomeScreen",
+mobileScreen:"mobileScreen",
+walletScreen:"Wallet",
+cardScreen:"Card",
+loanScreen:"Loan",
+profileScreen:"Profile",
+homeScreen:"Home",
+notificationScreen:"notificationScreen",
+verificationScreen:"verificationScreen",
+otpScreen:"otpScreen",
+createAccount:"createAccount",
+hasBusinessScreen:"hasBusinessScreen",
+noBusinessScreen:"noBusinessScreen",
+notSureBusinessScreen:"notSureBusinessScreen",
+createPINScreen:"createPINScreen",
+opamProtectGetStartedScreen:"opamProtectGetStartedScreen",
+nextOfKinScreen:"nextOfKinScreen",
+createDistressPIN:"createDistressPIN",
+opamProtectManageScreen:"opamProtectManageScreen",
+createDistressAccountScreen:"createDistressAccountScreen",
+businessDetails:"businessDetails",
+distressSafeWord:"distressSafeWord",
+uploadDocuments:"uploadDocuments",
+keyContactsDetails:"keyContactsDetails",
+policyScreen:"policyScreen",
+registrationOptionScreen:"registrationOptionScreen",
+updateKycScreen:"updateKycScreen",
+settingsScreen:"settingsScreen",
+notificationSettingsScreen:"notificationSettingsScreen",
+linkedAccountScreen:"linkedAccountScreen",
+upgradeAccountScreen:"upgradeAccountScreen",
+resetLoginPINScreen:"resetLoginPINScreen",
+resetTransacPINScreen:"resetTransacPINScreen",
+helpAndSupportScreen:"helpAndSupportScreen",
+createTransactionPINScreen:"createTransactionPINScreen",
+completeKYCScreen:"completeKYCScreen",
+indemityAgreementScreen:"indemityAgreementScreen",
+accountLimitScreen:"accountLimitScreen",
+resetPasswordScreen:"resetPasswordScreen",
+createNewPassword:"createNewPassword",
+protectAbout:"protectAbout",
+distressContactPreference:"distressContactPreference",
+distressNextOption:"distressNext",
+protectLogs:"protectLogs",
+protectSettings:"protectSettings"
+}
+export const RELOAD = {
+    wallet:"wallet",
+    transactionHistory:"transHistory"
+}
+export const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*]).{8,20}$/;
+export const ValidateNigerianMobile = /^(?:\+234|0)[789]\d{9}$/;
+export const ValidateNigerianMobile2 = /^(702|703|704|705|706|707|708|709|701|702|703|704|705|706|707|708|709)[0-9]{7}$/;
+export const COLOURS = {
+    inputWrapper:"#F0F3F3",
+    yellow:"#FFCD3D",
+    defaultWhite:'#F2F2F2',
+    white:"white",
+    black:"black",
+    orange:"#F8B02B",
+    gray:"#D0D0D0",
+    inActive:"#D1D1D1",
+    h1:"#16110D",
+    subTitle:"#6F7174",
+    darkRed:"#5c0009",
+    lighterRed:"#ffdede",
+    lighterGreen:"#caf7c8",
+    green:"#20A100",
+    red:"red",
+    borderColor:"#212529",
+    inputLabel:"#6F7174",
+    blue300: "#0D2A9E",
+    blue400: "#040B2B",
+    dotInactive: "#666666",
+    dotActive: "#F28815",
+    white16: "rgba(255, 255, 255, 0.16)",
+    gray64:"rgba(102, 102, 102, 0.64)",
+    gray50:"rgba(244, 244, 244, 1)",
+    gray100:"rgba(229, 229, 229, 1)",
+    dark300:"rgba(102, 102, 102, 1)",
+    lightGreen:"rgba(198, 245, 186, 1)",
+    darkGreen:"#035c00",
+    modalBackground:"rgba(0, 0, 0, 0.5)",
+    limegreen:"limegreen",
+    danger:"#ff756b",
+    success:"#198754",
+    lightSuccess:"#ddffdd",
+    lightBlue:"rgba(132, 157, 255, 1)",
+    lightBlue30:"rgba(234, 238, 255, 1)",
+    lightOrange:"rgba(255, 196, 133, 1)",
+    purple:"#8B1D41",
+    lightPurple:"#B13627"
+}
+export const FONTFAMILY = {
+    Switzer:"Switzer",
+    SwitzerNormal:"Switzer-normal",
+    DMSans:{
+        normal: Platform.OS != "ios" ? 'Baloo2-Regular' : 'Baloo2Regular',
+        medium: Platform.OS != "ios"? 'Baloo2-Medium' : 'Baloo2Medium',
+        bold:Platform.OS != "ios" ? 'Baloo2-Bold' : 'Baloo2Bold',
+        extra:Platform.OS != "ios" ? 'Baloo2-ExtraBold' : 'Baloo2ExtraBold',
+        semiBold:Platform.OS != "ios" ? 'Baloo2-SemiBold' : 'Baloo2SemiBold',
+    },
+    Baloo:{
+        normal: Platform.OS != "ios" ? 'Baloo2-Regular' : 'Baloo2Regular',
+        medium: Platform.OS != "ios"? 'Baloo2-Medium' : 'Baloo2Medium',
+        bold:Platform.OS != "ios" ? 'Baloo2-Bold' : 'Baloo2Bold',
+        extra:Platform.OS != "ios" ? 'Baloo2-ExtraBold' : 'Baloo2ExtraBold',
+        semiBold:Platform.OS != "ios" ? 'Baloo2-SemiBold' : 'Baloo2SemiBold',
+    },
+    MONTSERRAT: {
+        normal: Platform.OS != "ios" ? 'Montserrat-Regular' : 'MontserratRegular',
+        medium: Platform.OS != "ios"? 'Montserrat-Medium' : 'MontserratMedium',
+        bold:Platform.OS != "ios" ? 'Montserrat-Bold' : 'MontserratBold',
+        extra:Platform.OS != "ios" ? 'Montserrat-ExtraBold' : 'MontserratExtraBold',
+        semiBold:Platform.OS != "ios" ? 'Montserrat-SemiBold' : 'MontserratSemiBold',
+      },
+      INTER: {
+        normal: Platform.OS != "ios" ? 'Inter_18pt-Regular' : 'Inter_18pt-Regular',
+        medium: Platform.OS != "ios"? 'Inter_18pt-Medium' : 'Inter_18pt-Medium',
+        bold:Platform.OS != "ios" ? 'Inter_18pt-Bold' : 'Inter_18pt-Bold',
+        extra:Platform.OS != "ios" ? 'Inter_18pt-ExtraBold' : 'Inter_18pt-ExtraBold',
+        semiBold:Platform.OS != "ios" ? 'Inter_18pt-SemiBold' : 'Inter_18pt-SemiBold',
+      },
+}
+export const DEVICE = Dimensions.get("screen");
+export const LOCALSTORAGE = {
+permission:"permission",
+fcmToken:"fcmToken",
+accessToken:"accessToken",
+userData:"userData",
+welcome:"welcome",
+apiKey:"",
+refreshToken:"",
+fundAccountNumber:""
+}
+export const LISTENERS = {
+    createAccountForms:"createAccountForms",
+    fundWallet:"fundWallet"
+}
+export const CURRENCIES = {
+    Naira:{
+        Symbol:"₦",
+        Code:"NGN"
+    }
+}
+export const NigerianFlag = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANkAAABsCAMAAADQZ+eCAAAADFBMVEUAh1H///8AezrL3M9q71/pAAAAlUlEQVR4nO3PSQ0AMAzAsB38OY9ENeXhIIjXmuncPdM9Q0dTkZF1IiPrREbWiYysExlZJzKyTmRkncjIOpGRdSIj60RG1omMrBMZWScysk5kZJ3IyDqRkXUiI+tERtaJjKwTGVknMrJOZGSdyMg6kZF1IiPrREbWiYysExlZJzKyTmRkncjIOpGRdSIj60RG1onsn+wBF2QiLVLYZ6QAAAAASUVORK5CYII=";
