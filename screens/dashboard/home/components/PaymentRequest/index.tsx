@@ -52,7 +52,7 @@ const GetInvoices = ()=>{
     profileId:Reducer?.selectedBusiness?.regNumber!
   }).then((res)=>{
     // alert(JSON.stringify(res.data))
-    if(res.status)
+    if(res.data)
     {
       // setList(res.data);
     }
@@ -153,7 +153,7 @@ onSuccess={(d)=>{
     data:d.data
   }).then((res)=>{
   setLoading(false);
-    if(res.status)
+    if(res.data)
     {
       GetInvoices();
       setSection("success")

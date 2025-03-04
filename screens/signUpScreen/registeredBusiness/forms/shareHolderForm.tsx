@@ -185,7 +185,7 @@ const ShareHolderForm = (prop:CorporateInfoFormProp)=>{
         maxFileSize={5}
         fileTypes={[]}
         onChange={(d)=>{
-          if(d.status)
+          if(d.data)
             {
           setFieldValue("directorGovtId",d.data.path);
             }
@@ -201,7 +201,7 @@ const ShareHolderForm = (prop:CorporateInfoFormProp)=>{
         maxFileSize={5}
         fileTypes={[]}
         onChange={(d)=>{
-          if(d.status)
+          if(d.data)
             {
           setFieldValue("directorSignature",d.data.path);
             }

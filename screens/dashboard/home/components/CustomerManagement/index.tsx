@@ -40,7 +40,7 @@ const CustomerManagementScreen = ({route,goBack,Reducer,onSuccess}: ScreenCompon
    const [placeholder,setPlaceHolder] = useState<CompanyProfileProp[]>(Array.from({length:7}))
 const GetListOfAddresses = ()=>{
   GetAddressBook(Reducer?.selectedBusiness?.regNumber).then((res)=>{
-    if(res.status)
+    if(res.data)
     {
       setList(res.data)
     }
@@ -57,7 +57,7 @@ const GetListOfAddresses = ()=>{
       subTitle="Enter your transaction PIN to confirm this transaction"
       onValue={(pin)=>{
         AddNewAddressBook({...saveData,transactionPin:pin,profileId:Reducer?.selectedBusiness?.regNumber}).then((res)=>{
-          if(res.status)
+          if(res.data)
           {
             setSection("success")
           }

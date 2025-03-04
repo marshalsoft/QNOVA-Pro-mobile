@@ -111,7 +111,7 @@ const OpamProtectDistressContactPreferenceScreen = ({ route, goBack, Reducer, on
       emergency_contact_priority:1,
       contact_id:contactId
     }).then((res)=>{
-      if(res.status)
+      if(res.data)
       {
         dispatch({type:"update",payload:{
         creationOfDistressPin:true,
@@ -132,7 +132,7 @@ const OpamProtectDistressContactPreferenceScreen = ({ route, goBack, Reducer, on
       gender:saveData.gender,
       emergency_contact_priority:1
     }).then((res)=>{
-      if(res.status)
+      if(res.data)
       {
         dispatch({type:"update",payload:{
         creationOfDistressPin:true,
@@ -147,7 +147,7 @@ const GetProfile = ()=>{
   setFetching(true)
   OpamProtectGetUser().then((res)=>{
    
-    if(res.status)
+    if(res.data)
     {
       if(res.data?.emergency_contacts?.length !== 0)
       {

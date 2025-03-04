@@ -56,7 +56,7 @@ onValue={(cpin)=>{
    return ShowMessage("top").fail("Confirm PIN not match!");
  }
  CreateTransationPIN(pin).then((res)=>{
-   if(res.status)
+   if(res.data)
    {
      navigationRef.current?.goBack();
    }

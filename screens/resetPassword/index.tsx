@@ -46,7 +46,7 @@ const ResetPasswordScreen = ({Reducer,route}: ScreenComponentType) => {
       password: String(values.confirmPassword).trim()
   }
       ResetPassword(data).then((res)=>{
-        if(res.status)
+        if(res.data)
         {
           navigationRef.current?.goBack()
         }

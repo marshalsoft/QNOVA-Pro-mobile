@@ -72,7 +72,7 @@ export function RemoveSpecialCharaters(d: string) {
     appTYPE: 'json' | 'image' = 'json',
   ) {
     var myHeaders = new Headers();
-    myHeaders.append("x-api-key", "wyd32898by32p04rwnv0289ybwvv924vyb0849");
+    myHeaders.append("x-api-key", "y3286wdy9132gdyv32efvy9d2egf2pdco8wtev2yekcvefcs");
     var formData = new FormData();
     var method = "post";
     var method = "post";
@@ -83,7 +83,6 @@ export function RemoveSpecialCharaters(d: string) {
       url = splitString[1];
     }
     
-    var ServerStatus:boolean = true;
     return new Promise<APIResponse>((resolve, _reject) => {
           if (appTYPE !== 'json') {
             for (var a in data) {
@@ -92,7 +91,6 @@ export function RemoveSpecialCharaters(d: string) {
             }
           }
           AsyncStorage.getItem(LOCALSTORAGE.accessToken).then((token: any) => {
-          // AsyncStorage.getItem(LOCALSTORAGE.apiKey).then((apiKey: any) => {
             if(String(token) !== "null") {
               myHeaders.append('Authorization', `Bearer ${token}`);
             }
@@ -117,31 +115,18 @@ export function RemoveSpecialCharaters(d: string) {
               '|'
             );
             fetch(`${BASEUrl}${url}`, requestOptions)
-              .then((res)=>{ 
-               if(res.status >= 200 && res.status < 299){
-                ServerStatus = true
-              }else if(res.status >= 300 && res.status < 399){
-              ServerStatus = false
-               }else if(res.status >= 400 && res.status < 499){
-              ServerStatus = false
-               }else if(res.status >= 500){
-              ServerStatus = false
-              }
-            return res.json();     
-              })
+              .then((res)=>res.json())
               .then((result: APIResponse) => {
                 if(result.errors)
                 {
                   result.message = Object.values(result.errors).filter((a,i)=>i === 0).join("").replace(/[\]\["]]/g,"")
                 }
                 console.log(`${BASEUrl}${url}`, '| respons->', result);
-                resolve({...result,status:ServerStatus});
+                resolve(result);
               }).catch(error => {
-               
                 console.log(error);
                 resolve({
-                  status: false,
-                  data: {},
+                  status: "failed",
                   message: error.message,
                 });
               });
@@ -155,7 +140,8 @@ export function RemoveSpecialCharaters(d: string) {
       appTYPE: 'json' | 'image' = 'json',
     ) {
       var myHeaders = new Headers();
-      myHeaders.append("x-api-key", "wyd32898by32p04rwnv0289ybwvv924vyb0849");  var formData = new FormData();
+      myHeaders.append("x-api-key", "y3286wdy9132gdyv32efvy9d2egf2pdco8wtev2yekcvefcs"); 
+      var formData = new FormData();
       var ServerStatus:boolean = true;
       return new Promise<APIResponse>((resolve, _reject) => {
             if (appTYPE !== 'json') {
@@ -170,9 +156,7 @@ export function RemoveSpecialCharaters(d: string) {
                 if(String(token)) {
                   myHeaders.append('Authorization', `Bearer ${token}`);
                 }
-                // if(String(apiKey)) {
-                  myHeaders.append('x-api-key',"wyd32898by32p04rwnv0289ybwvv924vyb0849")// apiKey);
-                  // }
+               
                 if (appTYPE !== 'json') {
                   myHeaders.append('Content-Type', 'multipart/form-data');
                 } else {
@@ -193,27 +177,14 @@ export function RemoveSpecialCharaters(d: string) {
                 '|'
               );
               fetch(`${BASEUrl}${url}`, requestOptions)
-                .then((res)=>{ 
-                 if(res.status >= 200 && res.status < 299){
-                  ServerStatus = true
-                }else if(res.status >= 300 && res.status < 399){
-                ServerStatus = false
-                 }else if(res.status >= 400 && res.status < 499){
-                ServerStatus = false
-                 }else if(res.status >= 500){
-                ServerStatus = false
-                }
-              return res.json();     
-                })
+                .then((res)=>res.json())
                 .then((result: APIResponse) => {
                   console.log(`${BASEUrl}${url}`, '| respons->', result.data);
-                  resolve({...result,status:ServerStatus,});
+                  resolve(result);
                 }).catch(error => {
-                 
                   console.log(error);
                   resolve({
-                    status: false,
-                    data: {},
+                    status: "failed",
                     message: error.message,
                   });
                 });
@@ -228,7 +199,8 @@ export function RemoveSpecialCharaters(d: string) {
     ) {
       var myHeaders = new Headers();
       var formData = new FormData();
-      myHeaders.append("x-api-key", "wyd32898by32p04rwnv0289ybwvv924vyb0849");  return new Promise<APIResponse>((resolve, _reject) => {
+      myHeaders.append("x-api-key", "y3286wdy9132gdyv32efvy9d2egf2pdco8wtev2yekcvefcs");  
+      return new Promise<APIResponse>((resolve, _reject) => {
             if (appTYPE !== 'json') {
               for (var a in data) {
                 formData.append(a, data[a]);
@@ -273,8 +245,7 @@ export function RemoveSpecialCharaters(d: string) {
                  
                   console.log(error);
                   resolve({
-                    status: false,
-                    data: {},
+                    status: "failed",
                     message: error.message,
                   });
                 });
@@ -288,6 +259,7 @@ export function RemoveSpecialCharaters(d: string) {
     appTYPE: 'json' | 'image' = 'json',
   ) {
     var myHeaders = new Headers();
+    myHeaders.append("x-api-key", "y3286wdy9132gdyv32efvy9d2egf2pdco8wtev2yekcvefcs"); 
     var formData = new FormData();
     var ServerStatus:boolean = true;
     return new Promise<APIResponse>((resolve, _reject) => {
@@ -322,27 +294,14 @@ export function RemoveSpecialCharaters(d: string) {
               '|'
             );
             fetch(`${BASEUrl}${url}`, requestOptions)
-              .then((res)=>{ 
-               if(res.status >= 200 && res.status < 299){
-                ServerStatus = true
-              }else if(res.status >= 300 && res.status < 399){
-              ServerStatus = false
-               }else if(res.status >= 400 && res.status < 499){
-              ServerStatus = false
-               }else if(res.status >= 500){
-              ServerStatus = false
-              }
-            return res.json();     
-              })
+              .then((res)=>res.json())
               .then((result: APIResponse) => {
                 console.log(`${BASEUrl}${url}`, '| respons->', result.data);
-                resolve({...result,status:ServerStatus,});
+                resolve(result);
               }).catch(error => {
-               
                 console.log(error);
                 resolve({
-                  status: false,
-                  data: {},
+                  status: "failed",
                   message: error.message,
                 });
               });
@@ -416,25 +375,25 @@ if(fmt.includes(String(spl[spl.length - 1]).toLowerCase()))
           Papa.parse(fileContent, {
             complete: (results) => {
             console.log('Parsed CSV results:', results.data);
-            resolve({status:true,message:response.name!,data:results.data})
+            resolve({status:"success",message:response.name!,data:results.data})
             },
             header: true, // Use this if your CSV has headers
           });
           }).catch((err)=>{
-            resolve({status:false,message:err.message,data:null})
+            resolve({status:"failed",message:err.message})
           })
           }else{
-            resolve({status:false,message:"The required file type is (XLSX) ",data:null})
+            resolve({status:"failed",message:"The required file type is (XLSX) "})
           }
         }
         }).catch((e)=>{
-          alert(JSON.stringify(e.message))
+          // alert(JSON.stringify(e.message))
         })
       } catch (error) {
-        alert(JSON.stringify(error))
+        // alert(JSON.stringify(error))
       }
       }else{
-        resolve({status:false,message:"Permission rejected.",data:null})
+        resolve({status:"failed",message:"Permission rejected."})
       }
       })
   });

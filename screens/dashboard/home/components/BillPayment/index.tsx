@@ -42,7 +42,7 @@ const BillPaymentScreen = ({Reducer,goBack,onSuccess}: ScreenComponentType) => {
       }
       
       BillPurchase(data).then((res)=>{
-    if(res.status)
+    if(res.data)
     {
       if(res.data?.data?.amountOfPower)
       {
@@ -210,7 +210,7 @@ const AirtimeListComponent = memo((prop:ListComponentProp)=>{
       }else{
         setFetching(false);
     FetchBillers("airtime").then((res)=>{
-      if(res.status)
+      if(res.data)
       {
         setAirtimeList(res.data)
         AsyncStorage.setItem("airtime",JSON.stringify(res.data))

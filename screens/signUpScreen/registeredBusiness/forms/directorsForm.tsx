@@ -157,7 +157,7 @@ const DirectorsForm = (prop:CorporateInfoFormProp)=>{
         maxFileSize={5}
         fileTypes={[]}
         onChange={(d)=>{
-          if(d.status)
+          if(d.data)
             {
           setFieldValue("directorGovtId",d.data.path);
             }
@@ -170,8 +170,10 @@ const DirectorsForm = (prop:CorporateInfoFormProp)=>{
         style={{marginTop:10,marginBottom:40}}
         >
         <BaseFilePicker
+        fileTypes={[]}
+        maxFileSize={5000}
         onChange={(d)=>{
-          if(d.status)
+          if(d.data)
             {
           setFieldValue("directorSignature",d.data.path);
             }

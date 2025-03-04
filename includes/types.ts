@@ -218,9 +218,9 @@ export interface ForgotPasswordProps {
   email?:string;
 }
 export interface APIResponse {
-  status: boolean;
+  status: "success"|"failed";
   message: string;
-  data: any;
+  data?: any;
   errors?: any;
   errorCode?: "OTP_ALREADY_SENT" | "SENT" | "FAILED" | "RESOURCE_NOT_FOUND" | "USER_ALREADY_EXISTS";
 }

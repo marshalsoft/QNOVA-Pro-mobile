@@ -34,7 +34,7 @@ const CreateDistressPINScreen = ({ route, goBack, Reducer, onSuccess }: ScreenCo
   const handleCreatePIN = (pin: string) => {
     if (route?.params?.goto) {
       OpamProtectUpdatePassword(pin).then((res) => {
-        if (res.status) {
+        if (res.data) {
           handleGotoDashboard();
         }
       })
@@ -42,7 +42,7 @@ const CreateDistressPINScreen = ({ route, goBack, Reducer, onSuccess }: ScreenCo
     OpamProtectCreatePassword({
       distress_pin: pin
     }).then((res) => {
-      if (res.status) {
+      if (res.data) {
         handleGotoDashboard();
       }
     })

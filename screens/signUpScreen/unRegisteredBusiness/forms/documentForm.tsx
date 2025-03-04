@@ -58,7 +58,7 @@ const DocumentForm = (prop:CorporateInfoFormProp)=>{
         maxFileSize={5}
         fileTypes={[]}
         onChange={(d)=>{
-          if(d.status)
+          if(d.data)
             {
           setFieldValue("businessLogoFile",d.data.path);
             }
@@ -75,7 +75,7 @@ const DocumentForm = (prop:CorporateInfoFormProp)=>{
          maxFileSize={5}
          fileTypes={[]}
         onChange={(d)=>{
-          if(d.status)
+          if(d.data)
             {
           setFieldValue("businessCACFile",d.data.path);
             }
@@ -92,7 +92,7 @@ const DocumentForm = (prop:CorporateInfoFormProp)=>{
         maxFileSize={5}
         fileTypes={[]}
         onChange={(d)=>{
-          if(d.status)
+          if(d.data)
             {
           setFieldValue("businessProofOfAddressFile",d.data.path);
             }
@@ -109,7 +109,7 @@ const DocumentForm = (prop:CorporateInfoFormProp)=>{
         maxFileSize={5}
         fileTypes={[]}
         onChange={(d)=>{
-          if(d.status)
+          if(d.data)
             {
           setFieldValue("businessProofOfIdFile",d.data.path);
             }

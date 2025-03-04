@@ -60,7 +60,7 @@ const TvComponent = (props:ElectricityComponentProps)=>{
       setFetching(true);
       GetTvPlans(d).then((res)=>{
          setFetching(false);
-         if(res.status)
+         if(res.data)
          {
             var list:ItemProps[] = [];
             res.data.forEach((a:PlansProps,_i:number)=>{

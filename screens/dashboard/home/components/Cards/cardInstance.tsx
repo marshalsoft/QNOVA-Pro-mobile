@@ -47,7 +47,7 @@ const CardInstanceComponent = (props:CardInstanceComponentProps) => {
       if(props?.cardDetails?.cardHash)
         {
         CardInfo(String(props?.cardDetails.accountId)).then((res)=>{
-          if(res.status)
+          if(res.data)
           {
             setCardInfo(res.data);
           }

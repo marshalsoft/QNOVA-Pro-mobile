@@ -33,8 +33,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import PushNotificationPermission from '../dashboard/home/components/pushNotificationPermission';
 import { ChatIcon } from '../../components/svgs/chatIcon';
 import { ChatButton } from '../../components/customerSupport/chat';
+import TwoFAComponent from '../../components/twoFA';
   const LoginScreen = ({route}:ScreenComponentType) => {
   const [selected,setSelected] = useState<number>(0)
+  const [selectedValue,setSelectedValue] = useState<string>("")
   const [loading,setLoading] = useState<boolean>(false);
    const {UserLogin} = useHttp();
    const [showPermission,setShowPermission] = useState<boolean>(false);
@@ -102,7 +104,11 @@ import { ChatButton } from '../../components/customerSupport/chat';
               location: "Lagos Nigeria",
             }).then((res)=>{
               setLoading(false)
-              if(res.status){
+              if(res.message.includes("verification") && res.message.includes("code"))
+                {
+                 setSelectedValue(values.code+values.phoneNumber)
+                }
+              if(res.data){
                 navigationRef.current?.reset({
                   index:0,
                   routes:[
@@ -163,7 +169,7 @@ import { ChatButton } from '../../components/customerSupport/chat';
       getUniqueId().then((uId)=>{
       getManufacturer().then((manufacturer)=>{
       UserLogin({
-        email:values.email.trim(),
+        email:String(values.email).toLowerCase().trim(),
         password:values.password,
         deviceName:manufacturer,
         deviceId:uId,
@@ -172,9 +178,12 @@ import { ChatButton } from '../../components/customerSupport/chat';
         location: "Lagos Nigeria"
       }).then((res)=>{
      setLoading(false);
-        if(res.status){
+     if(!res.data)
+     {
+      setSelectedValue(String(values.email).toLowerCase().trim())
+     }else{
           navigationRef.current?.navigate(ROUTES.dashboard)
-        }
+      }
       })
     })
     })
@@ -240,7 +249,13 @@ import { ChatButton } from '../../components/customerSupport/chat';
        }}
       show={showPermission}
       />
-     {loading && <BaseModalLoader />}
+      {selectedValue !== "" &&<TwoFAComponent 
+     onClose={()=>setSelectedValue("")}
+      indentify={selectedValue}
+      type={selected === 0?'phone':'email'}
+     />}
+     {loading &&<BaseModalLoader
+     />}
     <ChatButton />
     </AppContainer>
 }

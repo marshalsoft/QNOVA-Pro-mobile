@@ -74,7 +74,7 @@ const GetStaffs = ()=>{
     data:{},
     profileId:Reducer?.selectedBusiness?.regNumber!
   }).then((res)=>{
-if(res.status)
+if(res.data)
 {
   setList(res.data)
 }
@@ -102,7 +102,7 @@ if(searchText === "All")
         profileId:Reducer?.selectedBusiness?.regNumber!,
         data:{...saveData.data,password:pin}
       }).then((res)=>{
-        if(res.status)
+        if(res.data)
         {
           GetStaffs();
           setMessage(res.message);

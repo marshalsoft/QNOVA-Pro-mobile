@@ -41,7 +41,7 @@ const DataComponent = (props:AirtimeComponentProps)=>{
    useEffect(()=>{
       GetDataPlans(String(props.network.serviceType).toLowerCase()).then((res)=>{
          // alert(JSON.stringify(res));
-         if(res.status)
+         if(res.data)
          {
             setPlans(res.data);
          }
@@ -86,7 +86,7 @@ const DataComponent = (props:AirtimeComponentProps)=>{
        
       } 
       VerifyAirtimeNumber(props?.userData.phone).then((res)=>{
-         if(res.status && res.data?.isValid)
+         if(res.data && res.data?.isValid)
          {
             if(String(props.network.serviceType).toLowerCase().includes(String(res.data?.isp?.provider).toLowerCase()))
             {
@@ -214,7 +214,7 @@ const DataComponent = (props:AirtimeComponentProps)=>{
     walletId: values.walletId
    }
    VerifyAirtimeNumber(props?.userData.phone).then((res)=>{
-      if(res.status && res.data?.isValid)
+      if(res.data && res.data?.isValid)
       {
          if(String(props.network.serviceType).toLowerCase().includes(String(res.data?.isp?.provider).toLowerCase()))
          {

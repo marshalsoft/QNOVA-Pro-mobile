@@ -66,7 +66,7 @@ interface FileProps {
     label='Logo (PNG, 2mb max)'
     placeholder='Tap to upload'
     onChange={(d)=>{
-      if(d.status)
+      if(d.data)
       {
         setLogoProps({
           uri: String(d?.data.uri),
@@ -83,7 +83,7 @@ interface FileProps {
     label='CAC Certificate  (PDF, 2mb max)'
     placeholder='Tap to upload'
     onChange={(d)=>{
-      if(d.status)
+      if(d.data)
         {
       setCacCertificateProps({
         uri: String(d?.data.uri),
@@ -109,7 +109,7 @@ interface FileProps {
           cac_certificate:cacCertificateProps,
           profileId:props.value.cacNumber
         }).then((res)=>{
-          if(res.status)
+          if(res.data)
           {
             props.onValues({
               logo:logoProps.name,

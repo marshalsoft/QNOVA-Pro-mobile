@@ -65,7 +65,7 @@ export interface FormScreenProp {
     bvn:values.bvn!,
     dob:values.dob!
   }).then((res)=>{
-  if(res.status)
+  if(res.data)
   {
     if(props.index && props.onSuccess)
     {

@@ -53,7 +53,7 @@ const {GetBanks,loading,ShowMessage} = useHttp();
 const [listOfBanks,setListOfBanks] = useState<BankProp[]>([]);
 useEffect(()=>{
   GetBanks().then((response)=>{
-      if(response.status)
+      if(response.data)
       {
           setListOfBanks(response.data);
       }

@@ -76,7 +76,7 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
                 name:ROUTES.loginScreen
             }]
             })  
-    }else if(res.status)
+    }else if(res.data)
     {
         navigationRef.current?.navigate(ROUTES.otpScreen,{
         type: "phone",
@@ -112,7 +112,7 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
     }}
     onSubmit={(values:FormikValues, actions:any) => {
         VerifyEmail(String(values.email).trim()).then((res)=>{
-           if(res.status)
+           if(res.data)
            {
             navigationRef.current?.navigate(ROUTES.otpScreen,{
                 type: "email",

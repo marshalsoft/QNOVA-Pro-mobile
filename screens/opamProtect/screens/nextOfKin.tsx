@@ -118,7 +118,7 @@ const HandleUpdateEmergencyPreference = ()=>{
     preferred_contact_method:"SMS",
     contact_id:res.data.id
   }).then((res)=>{
-    if(res.status)
+    if(res.data)
     {
     dispatch({type:"update",payload:{
       creationOfDistressPin:true,
@@ -144,7 +144,7 @@ const HandleSubmitForm = ()=>{
     relationship:saveData.relationship,
     preferred_contact_method:"SMS"
   }).then((res)=>{
-    if(res.status)
+    if(res.data)
     {
       dispatch({type:"update",payload:{
       creationOfDistressPin:true,

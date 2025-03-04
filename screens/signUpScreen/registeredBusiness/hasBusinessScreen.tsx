@@ -263,7 +263,7 @@ const FormThree = ({handleForm,values}:{handleForm:(data:FormsProp)=>void;values
     >
    <BaseFilePicker
         onChange={(d)=>{
-            if(d.status)
+            if(d.data)
            {
           handleForm({gender:d.data.path})
           }
@@ -277,7 +277,7 @@ const FormThree = ({handleForm,values}:{handleForm:(data:FormsProp)=>void;values
       maxFileSize={5}
       fileTypes={[]}
         onChange={(d)=>{
-            if(d.status)
+            if(d.data)
                 {
           handleForm({gender:d.data.path})
                 }

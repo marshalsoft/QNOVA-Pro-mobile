@@ -48,7 +48,7 @@ const CreateAccountScreen = ({Reducer,route}: ScreenComponentType) => {
         }
 console.log(data);
       CreateAccount(data).then((res)=>{
-      if(res.status)
+      if(res.data)
       {
         setSuccess(true)
       }

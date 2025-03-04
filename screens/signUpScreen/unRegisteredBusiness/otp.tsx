@@ -26,7 +26,7 @@ const FormSchema = y.object({
     setSending(true);
     SendOTP(route?.params?.phoneNumber).then((res)=>{
       setSending(false);
-      if(!res.status)
+      if(!res.data)
       {
         // setTimeout(()=>{
         // navigationRef.current?.goBack();

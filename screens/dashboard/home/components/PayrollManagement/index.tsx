@@ -59,7 +59,7 @@ const GetPayroll = ()=>{
   GetPayrollList(
     Reducer?.selectedBusiness?.regNumber!
   ).then((res)=>{
-  if(res.status)
+  if(res.data)
   {
     setList(res.data);
   }
@@ -90,7 +90,7 @@ const searchText = String(searchQuery).trim();
       profileId:Reducer?.selectedBusiness?.regNumber!
       }).then((res)=>{
         setProcessing(false);
-        if(res.status)
+        if(res.data)
         {
           GetPayroll();
           setMessage(res.message);

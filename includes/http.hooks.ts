@@ -45,7 +45,7 @@ const useHttp = () => {
             duration: 4000,
             animationType: 'slide-in',
             style: {
-                backgroundColor: data.status ? "#00A551" : "red",
+                backgroundColor: data.data? "#00A551" : "red",
                 marginBottom: position === "top" ? 5 : 0,
                 marginTop: position === "bottom" ? 5 : 0,
             },
@@ -85,7 +85,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA('auth/login', props).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 } else {
                     dispatch({ type: "update", payload: res.data.user });
@@ -119,7 +119,7 @@ const useHttp = () => {
             return PostDATA('auth/pin-management/forgot', props).then((res) => {
                 setLoading(false);
                 ShowToast(res);
-                if (res.status || res?.errorCode == "OTP_ALREADY_SENT") {
+                if (res.data || res?.errorCode == "OTP_ALREADY_SENT") {
                     navigationRef.current?.navigate(ROUTES.forgotPasswordOTP,{message:res.message,...props});
                 }
                 resolve(res)
@@ -132,7 +132,7 @@ const useHttp = () => {
             return PostDATA('auth/pin-management/forgot', props).then((res) => {
                 setLoading(false);
                 ShowToast(res,);
-                if (res.status) {
+                if (res.data) {
                     navigationRef.current?.reset({
                         index: 0,
                         routes: [{
@@ -192,7 +192,7 @@ const useHttp = () => {
             console.log(data);
             return PostDATA(`auth/register`, data).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -215,7 +215,7 @@ const useHttp = () => {
             setLoading(true);
             return PostDATA(`wallets/transfer`, data).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -362,7 +362,7 @@ const useHttp = () => {
             setLoading(true);
             return PostDATA(`account-lookup`, prop).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -385,7 +385,7 @@ const useHttp = () => {
             setLoading(true);
             return PostDATA(`wallets/transfer`, data).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -398,7 +398,7 @@ const useHttp = () => {
             setLoading(true);
             return PostDATA(`wallets/transfer`, data).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -411,7 +411,7 @@ const useHttp = () => {
             setLoading(true);
             return GetDATA(`bulk-transfer-beneficiaries`, {}).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -424,7 +424,7 @@ const useHttp = () => {
             setLoading(true);
             return PostDATA(`cards`, prop).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -437,7 +437,7 @@ const useHttp = () => {
             setLoading(true);
             return PostDATA(`link-new-account`, prop).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -460,7 +460,7 @@ const useHttp = () => {
             setLoading(true);
             return PostDATA(`bills/purchase`, prop).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -472,7 +472,7 @@ const useHttp = () => {
             setLoading(true);
             return PostDATA(`bills/verify-airtime-phone`, { phoneNumber }).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -506,7 +506,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`bills/verify-account`, props).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -553,7 +553,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return GetDATA(`cards/${ref}`, {}).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowToast(res, "top");
                 }
                 resolve(res)
@@ -587,7 +587,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`delete:cards/delete-card/${id}`, {}).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message)
                 }
                 resolve(res);
@@ -599,7 +599,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`patch:cards/freeze`, prop).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message)
                 }
                 resolve(res);
@@ -611,7 +611,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`cards/topup`, prop).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message)
                 }
                 resolve(res);
@@ -623,7 +623,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`cards/withdrawal`, prop).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message)
                 }
                 resolve(res);
@@ -658,7 +658,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`patch:bulk-transfer-beneficiaries/${prop.groupId}/members/${prop.beneficiaryId}`, prop.data).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message)
                 }
                 resolve(res);
@@ -670,7 +670,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`delete:bulk-transfer-beneficiaries/${prop.groupId}/members/${prop.beneficiaryId}`, prop.data).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message)
                 }
                 resolve(res);
@@ -680,7 +680,7 @@ const useHttp = () => {
     const RequestAccountStatement = (prop: any) => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`transactions/generate-statement`, prop).then((res) => {
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message);
                 }
                 resolve(res);
@@ -693,7 +693,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`${prop.profileId}/customers`, prop).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message);
                 }
                 resolve(res);
@@ -705,7 +705,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return GetDATA(`${prop}/customers`, prop).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message);
                 }
                 resolve(res);
@@ -727,7 +727,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`user/update-profile`, data).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message);
                 } else {
                     ShowMessage("top").success(res.message);
@@ -757,7 +757,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`${data.profileId}/invoices`, data.data).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message);
                 }
                 resolve(res);
@@ -784,7 +784,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`${data.profileId}/staffs`, data.data).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message);
                 }
                 resolve(res);
@@ -827,7 +827,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`${prop.profileId}/payroll`, prop.data).then((res) => {
                 setLoading(false);
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message);
                 }
                 resolve(res);
@@ -862,7 +862,7 @@ const useHttp = () => {
     const UpdatePreference = (prop: UpdatePreferenceProp) => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`patch:user/settings`, prop).then((res) => {
-                if (!res.status) {
+                if (!res.data) {
                     ShowMessage("top").fail(res.message);
                 } else {
                     ShowMessage("top").success(res.message);
@@ -975,7 +975,7 @@ const useHttp = () => {
             return PostDATA(`auth/create-new-password`,prop).then((res)=>{
                 setLoading(false);
                 ShowToast(res,"top");
-                if (res.status) {
+                if (res.data) {
                     navigationRef.current?.reset({
                         index: 0,
                         routes: [{
@@ -997,6 +997,30 @@ const useHttp = () => {
             });
         })
     }
+    
+    const LoginWithFTA = (props:any)=>{
+        return new Promise<APIResponse>((resolve)=>{
+            setLoading(true);
+            return PostDATA(`auth/verify-login-code`,props).then((res)=>{
+                setLoading(false);
+                ShowToast(res,"top");
+                if (res.data) {
+                    dispatch({ type: "update", payload: res.data.user });
+                    AsyncStorage.setItem(LOCALSTORAGE.userData, JSON.stringify(res.data.user));
+                    AsyncStorage.setItem(LOCALSTORAGE.accessToken, res.data.tokens.accessToken);
+                    AsyncStorage.setItem(LOCALSTORAGE.refreshToken, res.data.tokens.refreshToken);
+                    navigationRef.current?.reset({
+                        index:0,
+                        routes:[
+                            {name:ROUTES.dashboard}
+                        ]
+                    })
+                }
+                resolve(res)
+            });
+        })
+    }
+
     return {
         UserLogin,
         VerifiyBusinessName,
@@ -1074,7 +1098,8 @@ const useHttp = () => {
         OpamProtectUpdatePassword,
         UserResetPassword,
         UserCreateNewPassword,
-        GetOpamProtectAccountNumber
+        GetOpamProtectAccountNumber,
+        LoginWithFTA
     }
 };
 export default useHttp;

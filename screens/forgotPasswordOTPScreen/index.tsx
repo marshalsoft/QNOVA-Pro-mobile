@@ -73,7 +73,7 @@ const FormSchema = y.object({
       password
     }).then((res)=>{
       setLoading(false)
-      if(res.status)
+      if(res.data)
       {
         navigationRef.current?.navigate(ROUTES.createNewPassword)
       }

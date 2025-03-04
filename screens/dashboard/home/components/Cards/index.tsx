@@ -86,13 +86,13 @@ const CardsScreen = ({route,Reducer,goBack,onSuccess}: ScreenComponentType) => {
   const {GetAllPHYSICALCards,CardWithdrawal,CardTopUp,CardFreezeUnfreeze,CardDelete,GetAllVIRTUALCards,loading,ResquestCard,FetchCardBrands} = useHttp();
   const FetchCards = ()=>{
     GetAllPHYSICALCards().then((res)=>{
-if(res.status && res.data.length !== 0)
+if(res.data && res.data.length !== 0)
 {
   setListOfPhysicalCards(res.data)
 }
     })
     GetAllVIRTUALCards().then((res)=>{
-      if(res.status && res.data.length !== 0)
+      if(res.data && res.data.length !== 0)
         {
           setListOfVirtualCards(res.data)
         }
@@ -101,7 +101,7 @@ if(res.status && res.data.length !== 0)
 const [listOfCardBrands,setListOfCardBrands] = useState<CardsProps[]>([])
 const handleGetBrands = ()=>{
     FetchCardBrands().then((res)=>{
-        if(res.status)
+        if(res.data)
         {
           setListOfCardBrands(res.data)
         }
@@ -157,7 +157,7 @@ const handleGetBrands = ()=>{
           setProcessing(true);
           CardDelete(String(selectedCard?.accountId)).then((res)=>{
             setProcessing(false);
-            if(res.status)
+            if(res.data)
             {
         if(selectedCard.type === "VIRTUAL")
         {
@@ -183,7 +183,7 @@ const handleGetBrands = ()=>{
             status: "Inactive"
           }).then((res)=>{
             setProcessing(false);
-            if(res.status)
+            if(res.data)
             {
         setSucessObject({
           ...sucessObject,
@@ -201,7 +201,7 @@ const handleGetBrands = ()=>{
               transactionPin: pin
             }).then((res)=>{
               setProcessing(false);
-              if(res.status)
+              if(res.data)
               {
                 setSucessObject({
                   ...sucessObject,
@@ -220,7 +220,7 @@ const handleGetBrands = ()=>{
               transactionPin: pin
             }).then((res)=>{
               setProcessing(false);
-              if(res.status)
+              if(res.data)
               {
                 setSucessObject({
                   ...sucessObject,
@@ -455,7 +455,7 @@ var data:CreateCardPayloadProps = values as CreateCardPayloadProps;
  setFetching(true);
 ResquestCard(data).then((res)=>{
   setFetching(false);
-    if(res.status)
+    if(res.data)
     {
       FetchCards();
       setSucessObject({

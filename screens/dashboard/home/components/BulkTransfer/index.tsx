@@ -68,7 +68,7 @@ const BulkTransferComponent = ({route,goBack,onSuccess}: ScreenComponentType) =>
 const lastPosition = useRef<number>(0);
     const GetBulkListBeneficiaries = ()=>{
       GetBulkList().then((res)=>{
-        if(res.status)
+        if(res.data)
         {
           setList(res.data);
         }
@@ -184,7 +184,7 @@ onDelete={()=>{
     data:{},
     groupId:selectedGroup?.groupId!,
   }).then((res)=>{
-    if(res.status)
+    if(res.data)
     {
       GetBulkListBeneficiaries();
       setSucessObject({
@@ -212,14 +212,14 @@ onSave={(data)=>{
     channel:data.bankName === "QNova Wallet"?"WALLET":"IBAN",
     bankCode:data.bankCode
     }).then((res)=>{
-        if(res.status)
+        if(res.data)
         {
           UpdateBeneficiary({
             beneficiaryId:selectedGroup?.id!,
             data:data,
             groupId:selectedGroup?.groupId!
           }).then((res)=>{
-            if(res.status)
+            if(res.data)
               {
                 setSucessObject({
                   ...sucessObject,
@@ -305,7 +305,7 @@ onPress={()=>{
   console.log(data);
    CreateNewBulkTranfer(data).then((res)=>{
     setSending(false);
-    if(res.status)
+    if(res.data)
     {
       GetBulkListBeneficiaries();
       setSection("success");

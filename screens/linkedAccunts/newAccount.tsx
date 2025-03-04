@@ -21,7 +21,7 @@ const [listOfBanks,setListOfBanks] = useState<BankProp[]>([]);
 const thisBnkForm = useRef() as RefObject<FormikProps<FormikValues>>;
 useEffect(()=>{
     GetBanks().then((response)=>{
-        if(response.status)
+        if(response.data)
         {
             setListOfBanks(response.data);
         }

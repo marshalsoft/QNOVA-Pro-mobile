@@ -49,8 +49,7 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
   const dispatch = useDispatch();
   const GetBusinessProfile = ()=>{
     GetCurrentUserDetails().then((res)=>{
-      if(res.status)
-      {
+      if (res.data) {
         var selectedBusiness:BusinessProfileProps | null = null;
         if(res.data?.businessProfile && Array.isArray(res.data?.businessProfile))
         {
@@ -73,7 +72,7 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
   }
   React.useEffect(()=>{
   OpamProtectGetUser().then((response)=>{
-  if(response.status)
+  if(response.data)
   {
     dispatch({type: "update", payload:{...response.data}});
   }
@@ -87,7 +86,7 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
   React.useEffect(()=>{
     GetBusinessProfile()
     FetchBillers("airtime").then((res)=>{
-      if(res.status)
+      if(res.data)
       {
         dispatch({type:"update",payload:{airtimeProviders:res.data}})
       }
@@ -98,7 +97,7 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
   
   React.useEffect(()=>{
     FetchBillers("databundle").then((res)=>{
-      if(res.status)
+      if(res.data)
       {
         dispatch({type:"update",payload:{dataProviders:res.data}})
       }
@@ -107,7 +106,7 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
 
   React.useEffect(()=>{
     FetchBillers("electricity").then((res)=>{
-      if(res.status)
+      if(res.data)
       {
         dispatch({type:"update",payload:{utilityProviders:res.data}})
       }
@@ -116,7 +115,7 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
 
   React.useEffect(()=>{
     FetchBillers("cabletv").then((res)=>{
-      if(res.status)
+      if(res.data)
       {
         dispatch({type:"update",payload:{tvProviders:res.data}})
       }
@@ -125,7 +124,7 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
   
   React.useEffect(()=>{
     GetWallets().then((res)=>{
-      if(res.status)
+      if(res.data)
       {
         dispatch({type:"update",
           payload:{
@@ -149,7 +148,7 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
       return NavigatePop(2);
      }
       GetWallets().then((res)=>{
-        if(res.status)
+        if(res.data)
         {
           dispatch({type:"update",payload:{
             Wallets:res.data

@@ -64,7 +64,7 @@ onSubmit={(values:FormikValues, actions:any) => {
     walletId: values.walletId
    } 
    VerifyAirtimeNumber(props?.userData.phone).then((res)=>{
-      if(res.status && res.data?.isValid)
+      if(res.data && res.data?.isValid)
       {
          if(String(props.network.serviceType).toLowerCase().includes(String(res.data?.isp?.provider).toLowerCase()))
          {
@@ -185,7 +185,7 @@ const data = {
  walletId: values.walletId
 }
 VerifyAirtimeNumber(props?.userData.phone).then((res)=>{
-   if(res.status && res.data?.isValid)
+   if(res.data && res.data?.isValid)
    {
       if(String(props.network.serviceType).toLowerCase().includes(String(res.data?.isp?.provider).toLowerCase()))
       {

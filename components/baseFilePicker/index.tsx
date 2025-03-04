@@ -67,23 +67,23 @@ if(granted === "granted")
  setValue("");
  if(!res.size)
  {
-  props.onChange({status:false,message:res.copyError!,data:{}});
+  props.onChange({status:"failed",message:res.copyError!});
  }else{
  const fileSizeInMB = res.size / (1024 * 1024);
 if(fileSizeInMB > props.maxFileSize)
 {
   setValue("");
-  props.onChange({status:false,message:`File is more than the required size of ${fileSizeInMB}mb.`,data:{}});
+  props.onChange({status:"failed",message:`File is more than the required size of ${fileSizeInMB}mb.`});
 }else{
     var splitPath = String(res?.name).split(".");
     var extn = String(splitPath[splitPath.length - 1]).toLowerCase() as FileTypes;
     if(fileTypes.includes(extn))
     {
     setValue(res.name!);
-    props.onChange({status:true,message:"",data:res});
+    props.onChange({status:"success",message:"",data:res});
     }else{
     ShowMessage("top").fail(`Oops! invalid file format, the following is required (${fileTypes.join(", ")}).`);
-    props.onChange({status:false,message:"",data:null});
+    props.onChange({status:"success",message:""});
     }
   }
  }
@@ -110,7 +110,7 @@ if(fileSizeInMB > props.maxFileSize)
         if(props.upload)
         {
           return  UploadFile().then((res)=>{
-            if(res.status)
+            if(res.data)
             {
               if(Array.isArray(res.data))
               {

@@ -120,7 +120,7 @@ const StartTimer = ()=>{
               name: `recording.${extn[extn.length - 1]}`,
             }
           }).then((res) => {
-            if (res.status) {
+            if (res.data) {
               navigationRef.current?.reset({
                 index: 0,
                 routes: [

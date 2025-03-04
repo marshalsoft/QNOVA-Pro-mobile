@@ -4,6 +4,7 @@ import { COLOURS } from "../../includes/constants";
 import Svg, { Rect, Path, Defs, Pattern, Use, Image } from "react-native-svg"
 import Logo from "../svgs/logo";
 import LottieView from 'lottie-react-native';
+import TwoFAComponent from "../twoFA";
 interface BaseLoaderProps {
     text?:string;
     modal?:boolean;
@@ -19,7 +20,6 @@ export default BaseInnerLoader;
 interface BaseActivityLoaderProps {
 message?:string;
 modal?:boolean;
-
 }
 export const BaseModalLoader = (props:BaseActivityLoaderProps)=>{
     if(props.modal)
@@ -29,7 +29,7 @@ export const BaseModalLoader = (props:BaseActivityLoaderProps)=>{
     transparent={true}
     >
  <View style={[AppStyles.modalContainer,{alignItems:"center",justifyContent:"center"}]} >
- <LottieView
+  <LottieView
       source={require('../../assets/json/qnova_loading_json.json')}
       style={{
         height:60,
@@ -52,7 +52,7 @@ export const BaseModalLoader = (props:BaseActivityLoaderProps)=>{
       loop={true}
       autoPlay={true}
     />
-    
     <Text style={{color:COLOURS.white}}>{props.message}</Text>
   </View>
 }
+

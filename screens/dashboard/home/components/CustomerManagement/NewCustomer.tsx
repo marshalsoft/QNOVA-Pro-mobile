@@ -53,7 +53,7 @@ const NewCustomerComponent = ({route,goBack,onSuccess}: ScreenComponentType) => 
     const [listOfBanks,setListOfBanks] = useState<BankProp[]>([]);
     useEffect(()=>{
       GetBanks().then((response)=>{
-          if(response.status)
+          if(response.data)
           {
               setListOfBanks(response.data);
           }

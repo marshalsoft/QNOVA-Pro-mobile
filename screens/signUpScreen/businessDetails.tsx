@@ -127,7 +127,7 @@ import { ReturnAllNumbers } from '../../includes/functions';
       // alert (JSON.stringify(fdata));
       // return ;
     CreateAccount(fdata).then((res)=>{
-    if(res.status)
+    if(res.data)
     {
       setSuccessMessage(res.message)
       setShowSuccess(true)
@@ -201,7 +201,7 @@ onSubmit={(values:FormProps, actions:any) => {
    if(!values.verified)
  {
   VerifyCACNumber("RC"+values?.cacNumber!).then((res)=>{
-    if(res.status)
+    if(res.data)
    {
     const { 
       affiliates, 

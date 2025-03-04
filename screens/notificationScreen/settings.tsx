@@ -24,7 +24,7 @@ const dispatch = useDispatch();
 const [itemIndex,setItemIndex] = useState<string | null>(null)
 const GetUser = ()=>{
   GetCurrentUserDetails().then((res)=>{
-    if(res.status && res.data?.preferences)
+    if(res.data && res.data?.preferences)
       {
        dispatch({ type: "update", payload:{
         preferences:res.data?.preferences
@@ -68,7 +68,7 @@ const HandleSettings = (parentIndex:number,childIndex:number,allowedParams:Allow
     enableBiometrics:Reducer.isBiometricsEnabled
   }).then((res)=>{
     setItemIndex(null);
-  if(res.status)
+  if(res.data)
   {
   
 }

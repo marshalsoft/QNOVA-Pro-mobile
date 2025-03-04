@@ -86,7 +86,7 @@ const TransactionHistoryScreen = ({route,goBack,Reducer,onSuccess}: ScreenCompon
     limit:10,
     skip:1
   }).then((res)=>{
-    if(res.status)
+    if(res.data)
     {
       var listOfDates:string[] = [];
       var list = res.data.map((a:TransactionHistoryProp,i:number)=>{
@@ -394,7 +394,7 @@ onValue={(pin)=>{
   setProcessing(true);
   RequestAccountStatement({...saveData,transactionPin:pin,walletId:selectedwalletId}).then((res)=>{
     setProcessing(false);
-    if(res.status)
+    if(res.data)
     {
       setSucessObject({
         ... sucessObject,

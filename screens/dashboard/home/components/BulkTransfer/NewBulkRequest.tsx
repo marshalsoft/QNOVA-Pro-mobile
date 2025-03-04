@@ -163,7 +163,7 @@ style={{height:62,borderRadius:12,alignItems:"center"}}
  <TouchableOpacity 
  onPress={()=>{
     UploadFile().then((res)=>{
-    if(res.status)
+    if(res.data)
     {
       const titleKeys = ['accountNumber','accountName','bankName','bankCode','amount','isQNovaAccount'];
       if(Array.isArray(res.data))

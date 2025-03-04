@@ -101,7 +101,7 @@ const WalletTransferScreen = ({Reducer,goBack,onSuccess}: ScreenComponentType) =
     })
     useEffect(()=>{
         GetBeneficiaries().then((response)=>{
-            if(response.status)
+            if(response.data)
             {
                 if(response.data?.transfers)
                 {
@@ -163,7 +163,7 @@ const WalletTransferScreen = ({Reducer,goBack,onSuccess}: ScreenComponentType) =
     }) as any[];
     useEffect(()=>{
         GetBanks().then((response)=>{
-            if(response.status)
+            if(response.data)
             {
                 setListOfBanks(response.data);
             }
@@ -286,7 +286,7 @@ onSubmit={(values:any, actions:any) => {
     bankCode:"044" 
     }).then((res)=>{
         setFetching(false);
-        if(res.status)
+        if(res.data)
         {
             if(res.data?.data)
             {
@@ -508,7 +508,7 @@ onSubmit={(values:any, actions:any) => {
     bankCode:values.bankCode
     }).then((res)=>{
         setFetching(false);
-        if(res.status)
+        if(res.data)
         {
             if(res.data?.isValid)
             {
@@ -754,7 +754,7 @@ data.amount = parseInt(String(data.amount).replace(/[,]/,''))
 setFetching(true)
 WalletToWalletTransferSingle(data).then((res)=>{
   setFetching(false);
-  if(res.status)
+  if(res.data)
   {
     setSelection("Success");
     DeviceEventEmitter.emit(RELOAD.wallet,{})
@@ -774,7 +774,7 @@ WalletToWalletTransferSingle(data).then((res)=>{
     setFetching(true)
     WalletToWalletTransferBulk(data).then((res)=>{
       setFetching(false);
-      if(res.status)
+      if(res.data)
       {
         setSelection("Success");
         DeviceEventEmitter.emit(RELOAD.wallet,{})
@@ -787,7 +787,7 @@ const data:any = savedValues as WalletToWalletTransferProps;
 data.amount = parseInt(String(data.amount).replace(/[,]/,''))
 WalletToBankTransferBulk({transactionPin:pin,...data}).then((res)=>{
               setFetching(false);
-              if(res.status)
+              if(res.data)
               {
                 setSelection("Success");
                 DeviceEventEmitter.emit(RELOAD.wallet,{})

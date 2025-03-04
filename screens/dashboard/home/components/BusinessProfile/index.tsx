@@ -56,7 +56,7 @@ const dispatch = useDispatch();
 const thisKeyContactForm = useRef<FormikProps<FormikValues>>(null)
 const GetUserInfo = ()=>{
   GetCurrentUserDetails().then((res)=>{
-    if(res.status)
+    if(res.data)
     {
       dispatch({ type: "update", payload: res.data});
     }
@@ -306,7 +306,7 @@ title="Save Changes"
      label="CAC Certificate"
      fileTypes={["png","pdf"]}
      onChange={(d)=>{
-      if(d.status)
+      if(d.data)
       setCACCert({
         uri: String(d?.data.uri),
         name:String(d?.data.name),

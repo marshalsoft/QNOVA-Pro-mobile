@@ -98,7 +98,7 @@ placeholder="Search"
             staffId:staffDetails?.id!,
             data:{}
         }).then((res)=>{
-            if(res.status)
+            if(res.data)
             {
                 setStaffDetails({
                     ...staffDetails,
