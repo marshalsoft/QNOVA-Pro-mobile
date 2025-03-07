@@ -39,6 +39,7 @@ import React from 'react';
 import Animated, { Easing, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { PERMISSIONS, request } from "react-native-permissions";
 import { ReturnAllLetter } from "../../../includes/functions";
+import { NavigatePop } from "../../../includes/useNavigation";
 
 const SafeWordScreen = ({ onValue, goBack }: PINScreenProp) => {
   const [recording, setRecording] = useState(false);
@@ -120,13 +121,9 @@ const StartTimer = ()=>{
               name: `recording.${extn[extn.length - 1]}`,
             }
           }).then((res) => {
-            if (res.data) {
-              navigationRef.current?.reset({
-                index: 0,
-                routes: [
-                  { name: ROUTES.dashboard }
-                ]
-              })
+            if(res.status === "success" && res.statusCode === 200)
+              {
+              NavigatePop(1)
             }
           })
         }}

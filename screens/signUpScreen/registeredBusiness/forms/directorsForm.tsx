@@ -154,7 +154,7 @@ const DirectorsForm = (prop:CorporateInfoFormProp)=>{
         style={{marginTop:10}}
         >
         <BaseFilePicker
-        maxFileSize={5}
+        maxFileSize={2}
         fileTypes={[]}
         onChange={(d)=>{
           if(d.data)
@@ -171,7 +171,7 @@ const DirectorsForm = (prop:CorporateInfoFormProp)=>{
         >
         <BaseFilePicker
         fileTypes={[]}
-        maxFileSize={5000}
+        maxFileSize={2}
         onChange={(d)=>{
           if(d.data)
             {

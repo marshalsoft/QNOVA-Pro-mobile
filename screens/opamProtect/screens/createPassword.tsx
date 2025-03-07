@@ -8,13 +8,17 @@ import BaseInput from "../../../components/baseInput";
 import { Formik, FormikProps, FormikValues } from 'formik';
 import * as y  from 'yup';
 const FormSchema = y.object({
-  password:y.string().min(8,"Password must be minimum of 8 characters.").matches(passwordRules,"Password must contain at least 8 characters, one uppercase, one number and one special case character").required('Password is required.'),
+  password:y.string().required('New password is required.').required('A strong password is required').matches(passwordRules, { message: 'Please create a stronger password.'}),
+  confirmPassword:y.string().oneOf([y.ref('password')], 'Passwords must match')
 });
 import Svg, { Path } from "react-native-svg"
 import styled from "styled-components/native";
 import BaseButton from "../../../components/baseButton";
 import { navigationRef } from "../../../App";
 import { useDispatch } from "react-redux";
+import { NavigatePop } from "../../../includes/useNavigation";
+import useHttp from "../../../includes/http.hooks";
+import { BaseModalLoader } from "../../../components/baseLoader";
 interface PINScreenProp {
   onValue:(otp:string)=>void;
   status:"pin"|"confirm";
@@ -27,12 +31,8 @@ interface PINScreenProp {
 const OpamProtectCreatePassword = ({onValue,params,status,goBack,title,subTitle}:PINScreenProp)=>{
  const thisForm = useRef() as RefObject<FormikProps<FormikValues>>
  const dispatch = useDispatch();
- useEffect(()=>{
-  // dispatch({
-  //   type: "update", payload: {
-  //     creationOfDistressPin: true
-  //   }})
- },[])
+ const {ShowMessage,OpamProtectCreatePassword,loading} = useHttp();
+ 
     return <AppContainer
     showNavBar
     white
@@ -48,24 +48,50 @@ const OpamProtectCreatePassword = ({onValue,params,status,goBack,title,subTitle}
      <Formik
      innerRef={thisForm}
 initialValues={{
-  password:""
+  password:"",
+  confirmPassword:""
 }}
 onSubmit={(values:FormikValues, actions:any) => {
- navigationRef.current?.navigate(ROUTES.opamProtectConfirmPasswordScreen,{password:values.password})
+ OpamProtectCreatePassword({
+  distress_pin:values.password
+}).then((res) => {
+  if (res.data) {
+     dispatch({
+  type: "update", payload: {
+    creationOfDistressPin: true
+  }
+})
+if(res.status === "success" && res.statusCode === 200)
+{
+NavigatePop(2);
+}
+  }
+})
 }}
 validationSchema={FormSchema}
 >
 {({values,handleChange,setFieldValue,handleSubmit,errors,isValid,touched})=>(<View style={{paddingHorizontal:20,flexDirection:"column",justifyContent:"center",alignItems:"center"}} >
-    <View style={{flexDirection:"row",justifyContent:"center",alignItems:"center",marginVertical:10}}>
+    <View style={{flexDirection:"column",justifyContent:"center",alignItems:"center",marginVertical:10,width:"100%"}}>
     <View style={{width:"100%"}}>
    <BaseInput
     type='visible-password'
     onChange={handleChange("password")}
-    label='Enter Password'
+    label='Password'
     placeholder={"Enter your password"}
     max={30}
     value={values.password}
     errorMessage={errors.password}
+    />
+    </View>
+    <View style={{width:"100%"}}>
+   <BaseInput
+    type='visible-password'
+    onChange={handleChange("confirmPassword")}
+    label='Confirm Password'
+    placeholder={"Enter confirm Password"}
+    max={30}
+    value={values.confirmPassword}
+    errorMessage={errors.confirmPassword}
     />
     </View>
     </View>
@@ -77,6 +103,7 @@ validationSchema={FormSchema}
     </Formik>
      </View>
   </View>
+  {loading && <BaseModalLoader />}
  </AppContainer>
 }
 export default OpamProtectCreatePassword;

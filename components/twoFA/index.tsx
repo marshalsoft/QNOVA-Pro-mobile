@@ -9,32 +9,15 @@ import { useEffect, useState } from "react";
 import useHttp from "../../includes/http.hooks";
 interface TwoFAComponentProps {
     onClose:()=>void;
-    indentify:string;
-    type:"email"|"phone";
+    handleLogin:(otp:string)=>void
 }
 const TwoFAComponent = (props:TwoFAComponentProps)=>{
     const [otp,setOtp] = useState<string>("");
-    const {loading,LoginWithFTA} = useHttp();
-    const handleLogin = ()=>{
-        LoginWithFTA(props.type === "email"?{
-            email:props.indentify,
-            otp,
-            type:props.type
-        }:{
-            phone:props.indentify,
-            otp,
-            type:props.type
-        }).then((res)=>{
-            if(res.data)
-            {
-                props.onClose()
-            }
-        })
-    }
+    
     useEffect(()=>{
     },[])
     return <View style={[{position:"absolute",top:0,bottom:0,left:0,right:0,width:"100%",height:"100%",backgroundColor:"rgba(0,0,0,0.4)"}]}>
-    <Animated.View style={[{position:"absolute",bottom:0,left:0,right:0,width:"100%",height:(DEVICE.height / 2)-100,backgroundColor:COLOURS.white,padding:20,borderTopLeftRadius:40,borderTopRightRadius:40,overflow:"hidden"}]}>
+    <Animated.View style={[{position:"absolute",bottom:0,left:0,right:0,width:"100%",height:(DEVICE.height / 2)-40,backgroundColor:COLOURS.white,padding:20,borderTopLeftRadius:40,borderTopRightRadius:40,overflow:"hidden"}]}>
        <View 
        style={{flexDirection:"column",padding:16}}
        >
@@ -45,11 +28,10 @@ const TwoFAComponent = (props:TwoFAComponentProps)=>{
         value={otp}
         />
         <BaseButton
-        loading={loading}
         disabled={otp.length !== 6}
         style={{marginVertical:10}}
         title="Continue login"
-        onPress={handleLogin}
+        onPress={()=>props.handleLogin(otp)}
         ></BaseButton>
         </View> 
         <TouchableOpacity 

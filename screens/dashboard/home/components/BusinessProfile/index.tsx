@@ -313,7 +313,7 @@ title="Save Changes"
         type:String(d?.data.type),
       })
      }}
-     maxFileSize={5}
+     maxFileSize={2}
     />:Reducer?.selectedBusiness?.documents?.map((a,i)=><View >
     <MockInput 
     label={i == 0?"Logo":"CAC Certificate"}

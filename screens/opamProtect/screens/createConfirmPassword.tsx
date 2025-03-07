@@ -76,6 +76,17 @@ validationSchema={FormSchema}
     errorMessage={errors.confirmPassword}
     />
     </View>
+    <View style={{width:"100%"}}>
+   <BaseInput
+    type='visible-password'
+    onChange={handleChange("confirmPassword")}
+    label='Enter Password'
+    placeholder={"Confirm your password"}
+    max={30}
+    value={values.confirmPassword}
+    errorMessage={errors.confirmPassword}
+    />
+    </View>
     </View>
   <BaseButton 
   loading={loading}

@@ -38,7 +38,8 @@ import TwoFAComponent from '../../components/twoFA';
   const [selected,setSelected] = useState<number>(0)
   const [selectedValue,setSelectedValue] = useState<string>("")
   const [loading,setLoading] = useState<boolean>(false);
-   const {UserLogin} = useHttp();
+   const {UserLogin,LoginWithFTA} = useHttp();
+   
    const [showPermission,setShowPermission] = useState<boolean>(false);
    useEffect(()=>{
     SplashScreen.hide();
@@ -59,11 +60,11 @@ import TwoFAComponent from '../../components/twoFA';
     }}
     disableScrol
     >
-    <View style={{backgroundColor:"#F2F2F2",flexDirection:"column",paddingVertical:30,height:DEVICE.height,borderTopRightRadius:20,borderTopLeftRadius:20}}>
+    <View style={{backgroundColor:"#F2F2F2",flexDirection:"column",paddingVertical:30,borderTopRightRadius:20,borderTopLeftRadius:20}}>
     <ScrollView 
     keyboardShouldPersistTaps="always"
     >
-    <View style={{flexDirection:"column",paddingHorizontal:16}}>
+    <View style={{flexDirection:"column",paddingHorizontal:16,minHeight:DEVICE.height}}>
     <Text style={{alignSelf:"center",color:COLOURS.black,fontSize:20,fontFamily:FONTFAMILY.INTER.medium}}>User login</Text>
      <Text style={{alignSelf:"center",color:"#7B7F99",fontSize:14,marginTop:10,marginBottom:20,textAlign:"center",fontFamily:FONTFAMILY.INTER.normal,width:"80%"}}>Please provide your phone number or email address and password to login.</Text>
       <View style={{height:1,backgroundColor:COLOURS.gray100,marginVertical:20}} ></View>
@@ -83,8 +84,8 @@ import TwoFAComponent from '../../components/twoFA';
         </View>
     {selected === 0?<Formik
           initialValues={{
-            phoneNumber:"8161235924",
-            password:"Mekene$83",
+            phoneNumber:"",
+            password:"",
             code:""
           }}
           onSubmit={(values:FormikValues, actions:any) => {
@@ -107,7 +108,7 @@ import TwoFAComponent from '../../components/twoFA';
               if(res.message.includes("verification") && res.message.includes("code"))
                 {
                  setSelectedValue(values.code+values.phoneNumber)
-                }
+                }else{
               if(res.data){
                 navigationRef.current?.reset({
                   index:0,
@@ -115,6 +116,7 @@ import TwoFAComponent from '../../components/twoFA';
                     {name:ROUTES.dashboard}
                   ]
               })
+            }
               }
             })
           })
@@ -178,11 +180,11 @@ import TwoFAComponent from '../../components/twoFA';
         location: "Lagos Nigeria"
       }).then((res)=>{
      setLoading(false);
-     if(!res.data)
-     {
+     if(res.message.includes("verification") && res.message.includes("code"))
+      {
       setSelectedValue(String(values.email).toLowerCase().trim())
-     }else{
-          navigationRef.current?.navigate(ROUTES.dashboard)
+     }else if(res.data){
+        navigationRef.current?.navigate(ROUTES.dashboard)
       }
       })
     })
@@ -250,9 +252,26 @@ import TwoFAComponent from '../../components/twoFA';
       show={showPermission}
       />
       {selectedValue !== "" &&<TwoFAComponent 
+      handleLogin={(otp)=>{
+        setLoading(true);
+            LoginWithFTA(selected === 1?{
+                email:selectedValue,
+                otp,
+                type:'email'
+            }:{
+                phone:selectedValue,
+                otp,
+                type:'phone'
+            }).then((res)=>{
+        setLoading(false);
+
+                if(res.data)
+                {
+                  setSelectedValue("")
+                }
+            })
+      }}
      onClose={()=>setSelectedValue("")}
-      indentify={selectedValue}
-      type={selected === 0?'phone':'email'}
      />}
      {loading &&<BaseModalLoader
      />}

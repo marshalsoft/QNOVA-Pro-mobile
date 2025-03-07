@@ -220,6 +220,7 @@ export interface ForgotPasswordProps {
 export interface APIResponse {
   status: "success"|"failed";
   message: string;
+  statusCode?:number;
   data?: any;
   errors?: any;
   errorCode?: "OTP_ALREADY_SENT" | "SENT" | "FAILED" | "RESOURCE_NOT_FOUND" | "USER_ALREADY_EXISTS";

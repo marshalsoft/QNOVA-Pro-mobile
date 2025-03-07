@@ -105,6 +105,25 @@ const CreateDistressAccountScreen = ({ route, goBack, Reducer, onSuccess }: Scre
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
+                   disabled={!Reducer?.creationOfEmergencyPreference}
+                        onPress={() => navigationRef.current?.navigate(ROUTES.distressSafeWord)}
+                        style={{ flexDirection: "row", alignItems: "center", gap: 10,opacity:Reducer?.creationOfEmergencyPreference?1:0.4 }}>
+                       <View style={{width:20,justifyContent:"center",alignItems:"center"}}>
+                        <SafeWordIcon />
+                        </View>
+                        <View style={{ flex: 1, flexDirection: "column" }}>
+                        <View style={{ flexDirection: "row" }}>
+                        <View style={{ flex:1}}>
+                            <Text style={{ color: COLOURS.black, fontSize: 14, fontWeight: "800", fontFamily: FONTFAMILY.INTER.semiBold }} >Create Safe Word</Text>
+                           </View>
+                         {Reducer?.fundingOfAccount && !Reducer.creationOfSafeWord ?<TouchableOpacity >
+                        <Text style={{ color: COLOURS.purple, fontSize: 14, fontWeight: "800", fontFamily: FONTFAMILY.INTER.semiBold }} >You're Here!</Text>
+                        </TouchableOpacity>:Reducer?.fundingOfAccount && Reducer.creationOfSafeWord?<CheckedIcon size={20} />:null}
+                        </View>   
+                            <SubTitleText style={{ fontSize: 12, textAlign: "left" }} >Choose a safe word to use in time of distress</SubTitleText>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
                     disabled={!Reducer?.creationOfEmergencyPreference}
                         onPress={() =>{
                             GetAccountNumber();
@@ -125,25 +144,7 @@ const CreateDistressAccountScreen = ({ route, goBack, Reducer, onSuccess }: Scre
                             <SubTitleText style={{ fontSize: 12, textAlign: "left" }} >Fund your account to complete the onboarding process</SubTitleText>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                   disabled={!Reducer?.creationOfEmergencyPreference}
-                        onPress={() => navigationRef.current?.navigate(ROUTES.distressSafeWord)}
-                        style={{ flexDirection: "row", alignItems: "center", gap: 10,opacity:Reducer?.creationOfEmergencyPreference?1:0.4 }}>
-                       <View style={{width:20,justifyContent:"center",alignItems:"center"}}>
-                        <SafeWordIcon />
-                        </View>
-                        <View style={{ flex: 1, flexDirection: "column" }}>
-                        <View style={{ flexDirection: "row" }}>
-                        <View style={{ flex:1}}>
-                            <Text style={{ color: COLOURS.black, fontSize: 14, fontWeight: "800", fontFamily: FONTFAMILY.INTER.semiBold }} >Create Safe Word</Text>
-                           </View>
-                         {Reducer?.fundingOfAccount && !Reducer.creationOfSafeWord ?<TouchableOpacity >
-                        <Text style={{ color: COLOURS.purple, fontSize: 14, fontWeight: "800", fontFamily: FONTFAMILY.INTER.semiBold }} >You're Here!</Text>
-                        </TouchableOpacity>:Reducer?.fundingOfAccount && Reducer.creationOfSafeWord?<CheckedIcon size={20} />:null}
-                        </View>   
-                            <SubTitleText style={{ fontSize: 12, textAlign: "left" }} >Choose a safe word to use in time of distress</SubTitleText>
-                        </View>
-                    </TouchableOpacity>
+                    
                     <BaseButton
                         onPress={() => {
                         NavigatePop(2)

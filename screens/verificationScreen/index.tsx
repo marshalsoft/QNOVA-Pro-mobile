@@ -15,8 +15,10 @@ import useHttp from "../../includes/http.hooks";
 import { navigationRef } from "../../App";
 import { BaseModalLoader } from "../../components/baseLoader";
 import { usePushNotificationHook } from "../../includes/pushNotification";
+import useShowToastMsg from "../../includes/useShowToastMsg";
 const FormSchemaEmail = y.object({
-    email:y.string().required('Please enter your email address.').email('A valid email address is required.').max(100)
+    // email:y.string().required('Please enter your email address.').email('A valid email address is required.').max(100)
+    data:y.string().required('Required email or phone number.').max(100)
 });
 const FormSchemaPhoneNumber = y.object({
     phoneNumber:y.string().min(10,"10 digits is required.").required('Phone number is required.')//.matches(ValidateNigerianMobile2, { message: 'A valid mobile number is required.'})
@@ -25,9 +27,24 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
     const [selected,setSelected] = useState<number>(0)
     const [flag,setFlag] = useState<string>("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAT4AAACfCAMAAABX0UX9AAAAMFBMVEUBh1L///8FilUAiEwqf1gCiE/l5eXv/fgIjVgAhVAAjFAug1z9/P0Fi1LZ6eLv//ciup9sAAABuklEQVR4nO3SyXECARAEweUS7AH4761ALlRoXlkedEYvj/NIz21//Qz12rfnzKrHcl7W5f9bb5f9fhrqvV9uA5s+cOchvuV2ud6PGb3jfh3kG9H745vRO52m+JYVXwlfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpf6su3jPh9+Y4ZvePLN+G3LlN86+2yj73v/eEbGfXBe5xHem7762eo1749Z1Y9fgF2nG32nRewWgAAAABJRU5ErkJggg==");
     const [otp,setCode] = useState<string>("+234");
-    const {} = usePushNotificationHook();
-   const {VerifyMobileNumber,VerifyEmail,loading} = useHttp()
-    return <AppContainer
+    const [isMobileNumber,setIsMobileNumber] = useState<boolean>(false);
+    
+   const {VerifyMobileNumber,VerifyEmail,loading,ShowMessage} = useHttp()
+   function checkEmailOrMobile(data:string) {
+    // Regular expression for a basic email pattern
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Regular expression for a basic mobile number pattern (assuming a 10-digit number)
+    const mobileRegex = /^[0-9]{10}$/;
+    if (emailRegex.test(data)) {
+      return 'email';
+    } else if (mobileRegex.test(data)) {
+      return 'mobile';
+    } else {
+      return 'data';
+    }
+  }
+  
+   return <AppContainer
     showNavBar
     goBack={()=>{
         navigationRef.current?.reset({
@@ -47,7 +64,7 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
     <Text style={{alignSelf:"center",color:COLOURS.black,fontSize:20,fontFamily:FONTFAMILY.INTER.medium}}>Let's get started</Text>
      <Text style={{alignSelf:"center",color:"#7B7F99",fontSize:14,marginTop:10,marginBottom:20,textAlign:"center",fontFamily:FONTFAMILY.INTER.normal,width:"80%"}}>Please provide your phone number or email address.</Text>
       <View style={{height:1,backgroundColor:COLOURS.gray100,marginVertical:20}} ></View>
-        <View style={{flexDirection:"row",height:50,backgroundColor:"#7B7F991A",borderRadius:16,padding:5}}>
+        {/* <View style={{flexDirection:"row",height:50,backgroundColor:"#7B7F991A",borderRadius:16,padding:5}}>
             <TouchableOpacity 
             onPress={()=>setSelected(0)}
             style={{flex:1,justifyContent:"center",alignItems:"center",borderRadius:12,backgroundColor:selected === 0?COLOURS.white:"transparent"}}
@@ -60,8 +77,8 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
             >
                 <Text style={{fontFamily:FONTFAMILY.INTER.normal,color:selected !== 0?COLOURS.purple:COLOURS.gray64,fontSize:14}}>Email Address</Text>
             </TouchableOpacity>
-        </View>
-        {selected === 0?<Formik
+        </View> */}
+        {/* {selected === 0?<Formik
     initialValues={{
       phoneNumber:"",
       code:"" 
@@ -106,44 +123,90 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
         onPress={handleSubmit}
         />
     </View>)}
-    </Formik>:<Formik 
+    </Formik>: */}
+    <Formik 
     initialValues={{
-      email:""
+      data:"",
+      code:""
     }}
     onSubmit={(values:FormikValues, actions:any) => {
-        VerifyEmail(String(values.email).trim()).then((res)=>{
+        if(checkEmailOrMobile(values.data) == "email"){
+        VerifyEmail(String(values.data).trim()).then((res)=>{
            if(res.data)
            {
             navigationRef.current?.navigate(ROUTES.otpScreen,{
                 type: "email",
-                email:String(values.email).toLowerCase().trim()
+                email:String(values.data).toLowerCase().trim()
           });
         }
     });
+    }
+    if(checkEmailOrMobile(values.data) == "mobile"){
+        if(String(values.code) == "")
+            {
+                ShowMessage().fail("Select country code")
+                return;
+            }
+        if(String(values.data).length !== 10)
+        {
+            ShowMessage().fail("Invalid phone number")
+            return;
+        }
+        VerifyMobileNumber(values.code+parseInt(values.data)).then((res)=>{
+            if(res.errorCode === "USER_ALREADY_EXISTS" || res.message.includes("cannot"))
+          {
+              navigationRef.current?.reset({
+                  index:0,
+                  routes:[{
+                      name:ROUTES.loginScreen
+                  }]
+                  })  
+          }else if(res.data)
+          {
+              navigationRef.current?.navigate(ROUTES.otpScreen,{
+              type: "phone",
+              phone:values.code+parseInt(values.phoneNumber)
+              })
+          }
+          });
+    }
       
     }}
     validationSchema={FormSchemaEmail}
     >
     {({values,handleChange,setFieldValue,handleSubmit,errors,isValid,touched})=>(
     <View style={{flexDirection:"column",marginTop:16}} >
-        <BaseInput
-        autoCapitalize="none"
-        value={values.email}
-        type='email-address'
-        onChange={(d)=>{
-          setFieldValue("email",d);
+        {checkEmailOrMobile(values.data) == "mobile"?<BaseInputMobile
+        placeholder="801 234 5678"
+        onValueChange={(d)=>{
+          setFieldValue("data",d);
         }}
-        label='Email address'
-        placeholder='Email address'
-        max={50}
-        errorMessage={touched.email && errors.email}
-        />
+        focus={checkEmailOrMobile(values.data) == "mobile"}
+        onCode={(code)=>{
+            setFieldValue("code",code);
+        }}
+        label='Phone Number'
+        value={ReturnMobile(values.data!)}
+        errorMessage={touched.data && errors.data}
+        />:<BaseInput
+        autoCapitalize="none"
+        focus={checkEmailOrMobile(values.data) == "email"}
+        value={values.data}
+        type={checkEmailOrMobile(values.data) == "mobile"?'mobile':'email-address'}
+        onChange={(d)=>{
+          setFieldValue("data",d);
+        }}
+        label='Enter email or phone number'
+        placeholder='Email or Phone number'
+        max={checkEmailOrMobile(values.data) == "mobile"?10:50}
+        errorMessage={touched.data && errors.data}
+        />}
         <BaseButton
         title="Continue"
         onPress={handleSubmit}
         />
     </View>)}
-    </Formik>}
+    </Formik>
        <View style={{flexDirection:"row",justifyContent:'center',alignItems:'center',paddingHorizontal:20,flexWrap:"wrap",marginVertical:20}} >
         <Text style={{fontSize:12,color:COLOURS.gray64,fontFamily:FONTFAMILY.INTER.normal}}>By tapping “Continue, you agree to QNOVA PRO's </Text>
         <TouchableOpacity 

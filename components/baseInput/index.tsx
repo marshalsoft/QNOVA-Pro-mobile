@@ -19,6 +19,7 @@ onChange:(text: string) => void;
 max:number;
 disabled?:boolean;
 value:string;
+focus?:boolean
 showPasswordStrenght?:boolean;
 label?:string;
 placeholder?:string;
@@ -93,6 +94,7 @@ const BaseInput = (props:BaseInputProps)=> {
         style={{flex:1}}
         >
      <TextInput
+     focusable={props.focus}
      cursorColor={COLOURS.purple}
      placeholderTextColor={COLOURS.gray64}
      underlineColorAndroid="transparent"

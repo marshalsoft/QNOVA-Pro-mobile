@@ -28,7 +28,8 @@ const BaseInputOTP = (props:BaseInputOTPProps)=> {
      <OTPTextView
      inputCount={6}
      textInputStyle={{borderColor:COLOURS.purple,borderWidth:1,borderRadius:8,width:40}}
-     offTintColor={COLOURS.purple}
+     offTintColor={COLOURS.gray}
+     tintColor={COLOURS.purple}
      handleTextChange={(d)=>props.onValue(d)}
      />
       </View>

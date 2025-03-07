@@ -55,7 +55,7 @@ const DocumentForm = (prop:CorporateInfoFormProp)=>{
           style={{marginTop:10}}
           >
         <BaseFilePicker
-        maxFileSize={5}
+        maxFileSize={2}
         fileTypes={[]}
         onChange={(d)=>{
           if(d.data)
@@ -72,7 +72,7 @@ const DocumentForm = (prop:CorporateInfoFormProp)=>{
           style={{marginTop:10}}
           >
          <BaseFilePicker
-         maxFileSize={5}
+         maxFileSize={2}
          fileTypes={[]}
         onChange={(d)=>{
           if(d.data)
@@ -89,7 +89,7 @@ const DocumentForm = (prop:CorporateInfoFormProp)=>{
           style={{marginTop:10}}
           >
         <BaseFilePicker
-        maxFileSize={5}
+        maxFileSize={2}
         fileTypes={[]}
         onChange={(d)=>{
           if(d.data)
@@ -106,7 +106,7 @@ const DocumentForm = (prop:CorporateInfoFormProp)=>{
           style={{marginTop:10,marginBottom:40}}
           >
         <BaseFilePicker
-        maxFileSize={5}
+        maxFileSize={2}
         fileTypes={[]}
         onChange={(d)=>{
           if(d.data)

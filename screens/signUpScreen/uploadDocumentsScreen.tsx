@@ -61,7 +61,7 @@ interface FileProps {
   >
    <View style={{flexDirection:"column",padding:16,paddingHorizontal:24}}>
     <BaseFilePicker
-    maxFileSize={5}
+    maxFileSize={2}
      fileTypes={["png","jpeg","jpg"]}
     label='Logo (PNG, 2mb max)'
     placeholder='Tap to upload'
@@ -79,7 +79,7 @@ interface FileProps {
     />
     <BaseFilePicker
     fileTypes={["png","jpeg","jpg"]}
-    maxFileSize={5}
+    maxFileSize={2}
     label='CAC Certificate  (PDF, 2mb max)'
     placeholder='Tap to upload'
     onChange={(d)=>{

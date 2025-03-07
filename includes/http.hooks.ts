@@ -88,10 +88,10 @@ const useHttp = () => {
                 if (!res.data) {
                     ShowToast(res, "top");
                 } else {
-                    dispatch({ type: "update", payload: res.data.user });
-                    AsyncStorage.setItem(LOCALSTORAGE.userData, JSON.stringify(res.data.user));
-                    AsyncStorage.setItem(LOCALSTORAGE.accessToken, res.data.tokens.accessToken);
-                    AsyncStorage.setItem(LOCALSTORAGE.refreshToken, res.data.tokens.refreshToken);
+                    // dispatch({ type: "update", payload: res.data.user });
+                    // AsyncStorage.setItem(LOCALSTORAGE.userData, JSON.stringify(res.data.user));
+                    // AsyncStorage.setItem(LOCALSTORAGE.accessToken, res.data.tokens.accessToken);
+                    // AsyncStorage.setItem(LOCALSTORAGE.refreshToken, res.data.tokens.refreshToken);
                 }
                 resolve(res)
             })
@@ -239,6 +239,10 @@ const useHttp = () => {
             setLoading(true);
             return PostDATA(`auth/confirm-verification-code`, data).then((res) => {
                 setLoading(false);
+                if(res.statusCode === 200)
+                {
+                    res.data = {}
+                }
                 ShowToast(res, "top");
                 resolve(res)
             });
@@ -911,7 +915,8 @@ const useHttp = () => {
     const OpamProtectUpdateSafeWord  = (props:OpamProtectUpdateSafeWordProps)=>{
         return new Promise<APIResponse>((resolve)=>{
             return PostDATA(`opam-protect/manage-safeword`,props).then((res)=>{
-            resolve(res)
+                
+                resolve(res)
             });
         })
     }
@@ -951,7 +956,12 @@ const useHttp = () => {
             setLoading(true);
             return PostDATA(`patch:opam-protect/manage-safeword`,props,"image").then((res)=>{
                 setLoading(false);
-                ShowToast(res,"top");
+                if(res.message.includes(""))
+                {
+                    ShowToast({data:{},...res},"top");
+                }else{
+                    ShowToast(res,"top");
+                }
                 resolve(res)
             });
         })

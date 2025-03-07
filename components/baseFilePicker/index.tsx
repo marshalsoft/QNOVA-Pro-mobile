@@ -70,10 +70,10 @@ if(granted === "granted")
   props.onChange({status:"failed",message:res.copyError!});
  }else{
  const fileSizeInMB = res.size / (1024 * 1024);
-if(fileSizeInMB > props.maxFileSize)
+if(fileSizeInMB > (props.maxFileSize * 1000)) 
 {
   setValue("");
-  props.onChange({status:"failed",message:`File is more than the required size of ${fileSizeInMB}mb.`});
+  props.onChange({status:"failed",message:`File is more than the required size of 2mb.`});
 }else{
     var splitPath = String(res?.name).split(".");
     var extn = String(splitPath[splitPath.length - 1]).toLowerCase() as FileTypes;

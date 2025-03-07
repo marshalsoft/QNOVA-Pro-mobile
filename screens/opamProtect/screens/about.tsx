@@ -46,7 +46,7 @@ const OpamProtectDistressLogsScreen = ({ route, goBack, Reducer, onSuccess }: Sc
         </View>
         <ArrowDown />
       </TouchableOpacity>
-    {selectedItem?.title === a.title?<View style={{height:150,backgroundColor:"red"}}></View>:null}
+    {selectedItem?.title === a.title?<View style={{height:150,backgroundColor:COLOURS.white}}></View>:null}
     </View>)}
       </ScrollView>
       </View>

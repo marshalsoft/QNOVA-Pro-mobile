@@ -270,11 +270,11 @@ const FormThree = ({handleForm,values}:{handleForm:(data:FormsProp)=>void;values
         }}
         label='Signature'
         errorMessage={""}
-        maxFileSize={5}
+        maxFileSize={2}
       fileTypes={[]}
     />
      <BaseFilePicker
-      maxFileSize={5}
+      maxFileSize={2}
       fileTypes={[]}
         onChange={(d)=>{
             if(d.data)

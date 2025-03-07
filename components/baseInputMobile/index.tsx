@@ -25,6 +25,7 @@ interface BaseInputMobileProps {
    flag?:string;
    rightIcon?:ReactNode;
    onBlur?:()=>void;
+   focus?:boolean;
 }
 const BaseInputMobile = (props:BaseInputMobileProps)=>{
     const SetCode = (country:CountrylistModel)=>{
@@ -106,6 +107,7 @@ const BaseInputMobile = (props:BaseInputMobileProps)=>{
       >
    <TextInput
    onFocus={HandleAnimUp}
+   focusable={props.focus}
    cursorColor={COLOURS.purple}
    underlineColorAndroid="transparent"
       editable={!props.disabled}

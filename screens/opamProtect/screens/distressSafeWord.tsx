@@ -108,14 +108,15 @@ const OpamProtectSafeWordScreen = ({ route, goBack, Reducer, onSuccess }: Screen
       gender:saveData.gender,
       emergency_contact_priority:1
     }).then((res)=>{
-      if(res.data)
+      if(res.status === "success" && res.statusCode === 200)
       {
         dispatch({type:"update",payload:{
         creationOfDistressPin:true,
         creationOfNextOfKin:true,
         creationOfEmergencyPreference:true
       }})
-      NavigatePop(1)
+      // NavigatePop(2);
+      navigationRef.current?.goBack()
       }
     })
   }

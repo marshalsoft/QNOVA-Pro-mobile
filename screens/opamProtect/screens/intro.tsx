@@ -19,8 +19,8 @@ interface SlideItemProp {
 const OpamProtectIntroScreen = ({ }: ScreenComponentType) => {
  const list: SlideItemProp[] = [
 {title:"Distress \"Fake\" Pin",img:require("../../../images/opamProtect/s1.png"),description:"Activate a secondary pin that accesses a secure wallet with limited funds, protecting you during forced transactions."},
-{title:"Personalized Distress Dashboard",img:require("../../../images/opamProtect/s2.png"),description:"You gain access to a dedicated dashboard separate from your regular account interface"},
-{title:"Incognito Transfers",img:require("../../../images/opamProtect/s3.png"),description:" Send money anonymously while ensuring full compliance with all regulatory standards."}
+{title:"Personalized Distress Dashboard",img:require("../../../images/opamProtect/s2.png"),description:"You gain access to a dedicated dashboard separate from your regular account interface"}
+// {title:"Incognito Transfers",img:require("../../../images/opamProtect/s3.png"),description:" Send money anonymously while ensuring full compliance with all regulatory standards."}
     ];
 const [switchScreen,setSwitchScreen] = useState<"welcome"|"get-started" | null>(null);
     const [selectedItem,setSelectedItem] = useState<SlideItemProp>(list[0])

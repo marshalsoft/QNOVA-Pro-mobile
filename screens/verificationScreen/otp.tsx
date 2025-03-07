@@ -72,7 +72,7 @@ const OtpScreen = ({route}: ScreenComponentType) => {
             VerifyOTP({
                 ...route?.params,
                 otp:otp}).then((res)=>{
-                    if(res.data)
+                    if(res.status === "success" && res.statusCode === 200)
                     {
                     navigationRef.current?.navigate(ROUTES.registrationOptionScreen,route?.params)
                     }
