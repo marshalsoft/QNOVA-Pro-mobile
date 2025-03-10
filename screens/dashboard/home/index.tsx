@@ -50,6 +50,7 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
   const GetBusinessProfile = ()=>{
     GetCurrentUserDetails().then((res)=>{
       if (res.data) {
+        delete res.data?.inDistress;
         var selectedBusiness:BusinessProfileProps | null = null;
         if(res.data?.businessProfile && Array.isArray(res.data?.businessProfile))
         {
@@ -61,13 +62,13 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
     })
   }
   const GotoFundWallet = ()=>{
-    dispatch({type: "update", payload:{
-      OpamProtectAccountNumber:{
-        accountNumber:"0900303030",
-        accountType:"wallet",
-        bankCode:"044"
-      }
-    }});
+    // dispatch({type: "update", payload:{
+    //   OpamProtectAccountNumber:{
+    //     accountNumber:"0900303030",
+    //     accountType:"wallet",
+    //     bankCode:"044"
+    //   }
+    // }});
     setSection("WalletTransfer")
   }
   React.useEffect(()=>{
@@ -124,6 +125,7 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
   
   React.useEffect(()=>{
     GetWallets().then((res)=>{
+      // alert (JSON.stringify(res))
       if(res.data)
       {
         dispatch({type:"update",
@@ -307,8 +309,9 @@ const DashboardScreen = ({ route,Reducer }: ScreenComponentType) => {
                 setShowMenu(false);
                 setShowProfile(!showProfile)
               }}
-              style={{height:50,justifyContent:"center",alignItems:"center",width:10,marginLeft:10}}>
+              style={{height:50,justifyContent:"center",alignItems:"center",width:10,marginLeft:10,flexDirection:"row",gap:5}}>
                 <ArrowDown />
+              {Reducer?.inDistress &&<View style={{width:10,height:10,borderRadius:10,backgroundColor:"#FFCD3D"}} ></View>}
               </TouchableOpacity>
             </View>
           </LinearGradient>

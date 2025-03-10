@@ -32,6 +32,8 @@ const initialState: UserDataModel = {
   transactions: [],
   portfolioList: [],
   wallets: [],
+  inDistress: false, 
+  is2FaEnabled: false,
   creationOfDistressPin: false,
   creationOfNextOfKin: false,
   creationOfEmergencyPreference: false,

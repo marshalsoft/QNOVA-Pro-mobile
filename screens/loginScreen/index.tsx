@@ -1,9 +1,9 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { View,Text, TouchableOpacity, Platform, StatusBar, ScrollView, Alert } from 'react-native';
-import { Formik, FormikValues } from 'formik';
+import { Formik, FormikProps, FormikValues } from 'formik';
 import * as y  from 'yup';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { ScreenComponentType, UserLoginProps } from '../../includes/types';
 import AppContainer from '../../components/appContainer';
 import { navigationRef } from '../../App';
@@ -17,13 +17,10 @@ import { BaseModalLoader } from '../../components/baseLoader';
 import BaseInputMobile from '../../components/baseInputMobile';
 import { ReturnMobile } from '../../includes/functions';
 const FormSchemaEmail = y.object({
-  email:y.string().required('Email is required.').email('A valid email address is required.').max(50,"Maximum of 50 characters"),
+  data:y.string().required('This field is required.'),
   password:y.string().required('Password is required.')
 });
-const FormSchemaPhoneNumber = y.object({
-  phoneNumber:y.string().required('Phone number is required.').min(10,"10 digits is required."),
-  password:y.string().required('Password is required.')
-});
+
 import { getUniqueId, getManufacturer,getBundleId } from 'react-native-device-info';
 import publicIP from 'react-native-public-ip';
 import SplashScreen from 'react-native-splash-screen';
@@ -35,11 +32,10 @@ import { ChatIcon } from '../../components/svgs/chatIcon';
 import { ChatButton } from '../../components/customerSupport/chat';
 import TwoFAComponent from '../../components/twoFA';
   const LoginScreen = ({route}:ScreenComponentType) => {
+  const dispatch = useDispatch();
   const [selected,setSelected] = useState<number>(0)
   const [selectedValue,setSelectedValue] = useState<string>("")
-  const [loading,setLoading] = useState<boolean>(false);
-   const {UserLogin,LoginWithFTA} = useHttp();
-   
+  const {UserLogin,LoginWithFTA,ShowMessage,loading} = useHttp();
    const [showPermission,setShowPermission] = useState<boolean>(false);
    useEffect(()=>{
     SplashScreen.hide();
@@ -47,6 +43,23 @@ import TwoFAComponent from '../../components/twoFA';
       setShowPermission(res === null)
       console.log("fcmToken:",res);
     })
+  },[])
+
+  function checkEmailOrMobile(data:string) {
+    // Regular expression for a basic email pattern
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Regular expression for a basic mobile number pattern (assuming a 10-digit number)
+    const mobileRegex = /^[0-9]{10}$/;
+    if (emailRegex.test(data)) {
+      return 'email';
+    } else if (mobileRegex.test(data)) {
+      return 'mobile';
+    } else {
+      return 'data';
+    }
+  }
+  useEffect(()=>{
+// alert (selectedValue)
   },[])
     return <AppContainer
     showNavBar
@@ -68,123 +81,48 @@ import TwoFAComponent from '../../components/twoFA';
     <Text style={{alignSelf:"center",color:COLOURS.black,fontSize:20,fontFamily:FONTFAMILY.INTER.medium}}>User login</Text>
      <Text style={{alignSelf:"center",color:"#7B7F99",fontSize:14,marginTop:10,marginBottom:20,textAlign:"center",fontFamily:FONTFAMILY.INTER.normal,width:"80%"}}>Please provide your phone number or email address and password to login.</Text>
       <View style={{height:1,backgroundColor:COLOURS.gray100,marginVertical:20}} ></View>
-        <View style={{flexDirection:"row",height:50,backgroundColor:"#7B7F991A",borderRadius:16,padding:5}}>
-            <TouchableOpacity 
-            onPress={()=>setSelected(0)}
-            style={{flex:1,justifyContent:"center",alignItems:"center",borderRadius:12,backgroundColor:selected === 0?COLOURS.white:"transparent"}}
-            >
-                <Text style={{fontFamily:FONTFAMILY.INTER.normal,color:selected === 0?COLOURS.purple:COLOURS.gray64,fontSize:14}}>Phone number</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-             onPress={()=>setSelected(1)}
-            style={{flex:1,justifyContent:"center",alignItems:"center",borderRadius:12,backgroundColor:selected !== 0?COLOURS.white:"transparent"}}
-            >
-                <Text style={{fontFamily:FONTFAMILY.INTER.normal,color:selected !== 0?COLOURS.purple:COLOURS.gray64,fontSize:14}}>Email Address</Text>
-            </TouchableOpacity>
-        </View>
-    {selected === 0?<Formik
-          initialValues={{
-            phoneNumber:"",
-            password:"",
-            code:""
-          }}
-          onSubmit={(values:FormikValues, actions:any) => {
-          setLoading(true);  
-          AsyncStorage.getItem(LOCALSTORAGE.fcmToken).then((fcmToken)=>{
-            console.log("playerId:",fcmToken," Mb:",values.code+values.phoneNumber);
-            publicIP().then(ip => { 
-            getUniqueId().then((uId)=>{
-            getManufacturer().then((manufacturer)=>{
-              UserLogin({
-              phone:values.code+values.phoneNumber,
-              password:values.password,
-              deviceName:manufacturer,
-              ipAddress:ip,
-              deviceId:uId,
-              playerId:fcmToken,
-              location: "Lagos Nigeria",
-            }).then((res)=>{
-              setLoading(false)
-              if(res.message.includes("verification") && res.message.includes("code"))
-                {
-                 setSelectedValue(values.code+values.phoneNumber)
-                }else{
-              if(res.data){
-                navigationRef.current?.reset({
-                  index:0,
-                  routes:[
-                    {name:ROUTES.dashboard}
-                  ]
-              })
-            }
-              }
-            })
-          })
-          })
-          })
-          })
-          }}
-        validationSchema={FormSchemaPhoneNumber}
-    >
-    {({values,handleChange,setFieldValue,handleSubmit,errors,isValid,touched})=>(
-    <View style={{flexDirection:"column",marginTop:16}} >
-        <BaseInputMobile
-         style={{marginBottom:0}}
-        placeholder="8012345678"
-        onValueChange={(d)=>{
-          setFieldValue("phoneNumber",d);
-        }}
-        onCode={(code)=>{
-            setFieldValue("code",code);
-        }}
-        label='Phone   Number'
-        value={ReturnMobile(values.phoneNumber!)}
-        errorMessage={touched.phoneNumber && errors.phoneNumber}
-        />
-        <BaseInput
-        max={30}
-        type='visible-password'
-        placeholder="*********"
-        onChange={(d)=>{
-          setFieldValue("password",d);
-        }}
-       
-        label='Enter your password'
-        value={values.password}
-        errorMessage={touched.password && errors.password}
-        />
-        <BaseButton 
-        title="Login"
-        onPress={handleSubmit}
-        />
-    </View>)}
-    </Formik>:<Formik 
+      <Formik 
     initialValues={{
-      email:"",
-      password:"" 
+      data:"",
+      password:"",
+      code:""
     }}
     onSubmit={(values:FormikValues, actions:any) => {
-     setLoading(true);
      AsyncStorage.getItem(LOCALSTORAGE.fcmToken).then((fcmToken)=>{
-      console.log("playerId:",fcmToken," Mb:",values.code+values.phoneNumber);
       publicIP().then(ip => { 
       getUniqueId().then((uId)=>{
       getManufacturer().then((manufacturer)=>{
-      UserLogin({
-        email:String(values.email).toLowerCase().trim(),
-        password:values.password,
-        deviceName:manufacturer,
-        deviceId:uId,
-        ipAddress:ip,
-        playerId:fcmToken,
-        location: "Lagos Nigeria"
-      }).then((res)=>{
-     setLoading(false);
-     if(res.message.includes("verification") && res.message.includes("code"))
+        let payload:any = {
+          email:String(values.data).toLowerCase().trim(),
+          password:values.password,
+          deviceName:manufacturer,
+          deviceId:uId,
+          ipAddress:ip,
+          playerId:fcmToken,
+          location: "Lagos Nigeria"
+        }
+        if(checkEmailOrMobile(values.data) == "mobile"){
+          delete payload.email;
+          payload = {...payload,
+            phone:"+"+values.code+parseInt(String(values.data)),
+          }
+          setSelected(0)
+        }else{
+        setSelected(1)
+        }
+     UserLogin(payload).then((res)=>{
+     console.log("UserLogin:",res)
+     if(res.data?.user){
+       dispatch({ type: "update", payload: res.data.user });
+        AsyncStorage.setItem(LOCALSTORAGE.userData, JSON.stringify(res.data.user));
+        AsyncStorage.setItem(LOCALSTORAGE.accessToken, res.data.tokens.accessToken);
+        AsyncStorage.setItem(LOCALSTORAGE.refreshToken, res.data.tokens.refreshToken);
+       return navigationRef.current?.navigate(ROUTES.dashboard)
+      }
+      ShowMessage("top").fail(res.message);
+      if(res.data?.is2FaEnabled)
       {
-      setSelectedValue(String(values.email).toLowerCase().trim())
-     }else if(res.data){
-        navigationRef.current?.navigate(ROUTES.dashboard)
+        return setSelectedValue(String(values.data).toLowerCase().trim())
       }
       })
     })
@@ -196,19 +134,31 @@ import TwoFAComponent from '../../components/twoFA';
     >
     {({values,handleChange,setFieldValue,handleSubmit,errors,isValid,touched})=>(
     <View style={{flexDirection:"column",marginTop:16}} >
-        <BaseInput
-        style={{marginBottom:10}}
-        autoCapitalize="none"
-        value={values.email}
-        type='email-address'
-        onChange={(d)=>{
-          setFieldValue("email",d);
+        {checkEmailOrMobile(values.data) == "mobile"?<BaseInputMobile
+        placeholder="801 234 5678"
+        onValueChange={(d)=>{
+          setFieldValue("data",d);
         }}
-        label='Email address'
-        placeholder='Email address'
-        max={50}
-        errorMessage={touched.email && errors.email}
-        />
+        focus={checkEmailOrMobile(values.data) == "mobile"}
+        onCode={(code)=>{
+            setFieldValue("code",code);
+        }}
+        label='Phone Number'
+        value={ReturnMobile(values.data!)}
+        errorMessage={touched.data && errors.data}
+        />:<BaseInput
+        autoCapitalize="none"
+        focus={checkEmailOrMobile(values.data) == "email"}
+        value={values.data}
+        type={checkEmailOrMobile(values.data) == "mobile"?'mobile':'email-address'}
+        onChange={(d)=>{
+          setFieldValue("data",d);
+        }}
+        label='Enter email or phone number'
+        placeholder='Email or Phone number'
+        max={checkEmailOrMobile(values.data) == "mobile"?10:50}
+        errorMessage={touched.data && errors.data}
+        />}
          <BaseInput
         value={values.password}
         type='visible-password'
@@ -226,7 +176,7 @@ import TwoFAComponent from '../../components/twoFA';
         />
        
     </View>)}
-    </Formik>}
+    </Formik>
     <TouchableOpacity
         style={{alignSelf:"center",marginVertical:20}} 
         onPress={()=>navigationRef.current?.navigate(ROUTES.forgotPassword)}
@@ -253,7 +203,6 @@ import TwoFAComponent from '../../components/twoFA';
       />
       {selectedValue !== "" &&<TwoFAComponent 
       handleLogin={(otp)=>{
-        setLoading(true);
             LoginWithFTA(selected === 1?{
                 email:selectedValue,
                 otp,
@@ -263,8 +212,6 @@ import TwoFAComponent from '../../components/twoFA';
                 otp,
                 type:'phone'
             }).then((res)=>{
-        setLoading(false);
-
                 if(res.data)
                 {
                   setSelectedValue("")

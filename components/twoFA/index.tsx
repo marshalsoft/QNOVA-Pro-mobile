@@ -21,8 +21,8 @@ const TwoFAComponent = (props:TwoFAComponentProps)=>{
        <View 
        style={{flexDirection:"column",padding:16}}
        >
-        <TitleText >2 Factor Verification</TitleText>
-        <Text style={{paddingVertical:10,color:COLOURS.black,fontSize:14}}>Enter the 2fta code sent to your email address.</Text>
+        <TitleText >2FA Verification</TitleText>
+        <Text style={{paddingVertical:10,color:COLOURS.black,fontSize:14}}>Enter the 2FA code sent to your email address.</Text>
         <BaseInputOTP
         onValue={(pin)=>setOtp(pin)}
         value={otp}

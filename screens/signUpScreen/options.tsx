@@ -27,7 +27,7 @@ const OptionScreen = ({route}: ScreenComponentType) =>{
     <View style={{backgroundColor:"#F2F2F2",flexDirection:"column",paddingVertical:30,height:DEVICE.height,borderTopRightRadius:20,borderTopLeftRadius:20}}>
     <ScrollView >
     <View style={{flexDirection:"column"}}>
-     <Text style={{alignSelf:"center",color:COLOURS.black,fontSize:20,fontFamily:FONTFAMILY.INTER.bold}}>Is your business o registered?</Text>
+     <Text style={{alignSelf:"center",color:COLOURS.black,fontSize:20,fontFamily:FONTFAMILY.INTER.bold}}>Is your business registered?</Text>
      <Text style={{alignSelf:"center",color:COLOURS.black,fontSize:12,marginTop:10,marginBottom:20,textAlign:"center",fontFamily:FONTFAMILY.INTER.bold,paddingHorizontal:50}}>Please insert your body copy here. </Text>
      <View style={{height:1,backgroundColor:COLOURS.gray100,marginVertical:20}} ></View>
     <View style={{paddingHorizontal:20,flexDirection:"column",justifyContent:"center",alignItems:"center"}} >

@@ -83,18 +83,10 @@ const useHttp = () => {
     const UserLogin = async (props: any) => {
         setLoading(true);
         return new Promise<APIResponse>((resolve) => {
-            return PostDATA('auth/login', props).then((res) => {
-                setLoading(false);
-                if (!res.data) {
-                    ShowToast(res, "top");
-                } else {
-                    // dispatch({ type: "update", payload: res.data.user });
-                    // AsyncStorage.setItem(LOCALSTORAGE.userData, JSON.stringify(res.data.user));
-                    // AsyncStorage.setItem(LOCALSTORAGE.accessToken, res.data.tokens.accessToken);
-                    // AsyncStorage.setItem(LOCALSTORAGE.refreshToken, res.data.tokens.refreshToken);
-                }
-                resolve(res)
-            })
+        PostDATA('auth/login', props).then((res) => {
+        setLoading(false);
+        resolve(res) 
+         })
         })
     };
 

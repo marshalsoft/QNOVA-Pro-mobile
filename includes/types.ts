@@ -7,6 +7,8 @@ export interface UserDataModel {
   middleName?: string;
   email?: string | null;
   phone?: string;
+  inDistress?:boolean;
+  is2FaEnabled?:boolean;
   lastLoginAt?: string;
   isBiometricsEnabled?: boolean;
   isBvnVerified?: boolean;
@@ -218,12 +220,11 @@ export interface ForgotPasswordProps {
   email?:string;
 }
 export interface APIResponse {
-  status: "success"|"failed";
+  status: any;
   message: string;
   statusCode?:number;
   data?: any;
-  errors?: any;
-  errorCode?: "OTP_ALREADY_SENT" | "SENT" | "FAILED" | "RESOURCE_NOT_FOUND" | "USER_ALREADY_EXISTS";
+  errorCode?: "OTP_ALREADY_SENT" | "SENT" | "FAILED" | "RESOURCE_NOT_FOUND" | "USER_ALREADY_EXISTS" |"INVALID_CREDENTIALS";
 }
 export interface NavigationProps {
   closeDrawer?: Function;

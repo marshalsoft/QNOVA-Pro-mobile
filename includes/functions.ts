@@ -91,10 +91,7 @@ export function RemoveSpecialCharaters(d: string) {
             }
           }
           AsyncStorage.getItem(LOCALSTORAGE.accessToken).then((token: any) => {
-            if(String(token) !== "null") {
               myHeaders.append('Authorization', `Bearer ${token}`);
-            }
-            
             if (appTYPE !== 'json') {
               myHeaders.append('Content-Type', 'multipart/form-data');
             } else {
@@ -117,11 +114,7 @@ export function RemoveSpecialCharaters(d: string) {
             fetch(`${BASEUrl}${url}`, requestOptions)
               .then((res)=>res.json())
               .then((result: APIResponse) => {
-                if(result.errors)
-                {
-                  result.message = Object.values(result.errors).filter((a,i)=>i === 0).join("").replace(/[\]\["]]/g,"")
-                }
-                console.log(`${BASEUrl}${url}`, '| respons->', result);
+                console.log(`${BASEUrl}${url}`, '| response->', result);
                 resolve(result);
               }).catch(error => {
                 console.log(error);
@@ -142,7 +135,6 @@ export function RemoveSpecialCharaters(d: string) {
       var myHeaders = new Headers();
       myHeaders.append("x-api-key", "y3286wdy9132gdyv32efvy9d2egf2pdco8wtev2yekcvefcs"); 
       var formData = new FormData();
-      var ServerStatus:boolean = true;
       return new Promise<APIResponse>((resolve, _reject) => {
             if (appTYPE !== 'json') {
               for (var a in data) {
@@ -179,7 +171,7 @@ export function RemoveSpecialCharaters(d: string) {
               fetch(`${BASEUrl}${url}`, requestOptions)
                 .then((res)=>res.json())
                 .then((result: APIResponse) => {
-                  console.log(`${BASEUrl}${url}`, '| respons->', result.data);
+                  console.log(`${BASEUrl}${url}`, '| respons->', result);
                   resolve(result);
                 }).catch(error => {
                   console.log(error);
