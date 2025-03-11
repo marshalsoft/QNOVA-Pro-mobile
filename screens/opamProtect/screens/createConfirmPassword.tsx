@@ -14,27 +14,27 @@ import Svg, { Path } from "react-native-svg"
 import styled from "styled-components/native";
 import BaseButton from "../../../components/baseButton";
 import { navigationRef } from "../../../App";
-import useHttp from "../../../includes/http.hooks";
+import useHttp, { OpamProtectAddEmergencyContactProps } from "../../../includes/http.hooks";
 import { NavigatePop } from "../../../includes/useNavigation";
 import { useDispatch } from "react-redux";
 
-const OpamProtectConfirmPassword = ({route}:ScreenComponentType)=>{
+const OpamProtectConfirmPassword = ({route,Reducer}:ScreenComponentType)=>{
  const thisForm = useRef() as RefObject<FormikProps<FormikValues>>
  const {ShowMessage,OpamProtectCreatePassword,loading} = useHttp();
 const dispatch = useDispatch();
  const handleCreatePIN = (password: string) => {
-    OpamProtectCreatePassword({
-      distress_pin: password
-    }).then((res) => {
-      if (res.data) {
-         dispatch({
+      const SaveData:OpamProtectAddEmergencyContactProps = {}
+      SaveData.distress_pin = password
+      dispatch({
       type: "update", payload: {
+        OpamProtectCreation:{
+        ...Reducer?.OpamProtectCreation,
+        ...SaveData
+        },
         creationOfDistressPin: true
       }
     })
     NavigatePop(2);
-      }
-    })
   }
   
  return <AppContainer

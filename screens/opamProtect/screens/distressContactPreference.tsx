@@ -39,18 +39,7 @@ value?:"SMS"|"EMAIL"|"PHONE_NUMBER";
 
 const OpamProtectDistressContactPreferenceScreen = ({ route, goBack, Reducer, onSuccess }: ScreenComponentType) => {
   const dispatch = useDispatch();
-  const listOfTitle:string[] = [
-    "Emergency Contact",
-    "Emergency - Preferred Contact Method",
-    "Distress Contact Preference",
-    "Create Safe word",
-  ]
-  const listOfSubTitle:string[] = [
-    "Safeguarding Your Account: Give us important details for emergency",
-    "Safeguarding Your Account: Give us important details for emergency",
-    "Choose a preference that serves you best",
-    "Choose a safe word to use in time of distress"
-  ]
+  
   const {ShowMessage,loading,OpamProtectAddEmergencyContact,OpamProtectGetUser,OpamProtectUpdateEmergencyContact} = useHttp();
   const [fetching,setFetching] = useState<boolean>(false);
   const [contactId,setContactId] = useState<string>("");
@@ -68,8 +57,18 @@ const OpamProtectDistressContactPreferenceScreen = ({ route, goBack, Reducer, on
   useEffect(()=>{
     
   },[])
-  
-  const [switchPIN,setSwitchPIN] = useState<boolean>(false);
+  const listOfTitle:string[] = [
+    `${contactId === ""?"Emergency Contact":"Update Emergency Contact"}`,
+    "Emergency - Preferred Contact Method",
+    "Distress Contact Preference",
+    "Create Safe word",
+  ]
+  const listOfSubTitle:string[] = [
+    "Safeguarding Your Account: Give us important details for emergency",
+    "Safeguarding Your Account: Give us important details for emergency",
+    "Choose a preference that serves you best",
+    "Choose a safe word to use in time of distress"
+  ]
   const [selectedTab,setSelectedTab] = useState<number>(0);
   const [listOfChannels,setListOfChannel] = useState<listOfChannelsProps[]>([
     {title:"Phone Call",selected:true,value:"PHONE_NUMBER"},
@@ -98,9 +97,30 @@ const OpamProtectDistressContactPreferenceScreen = ({ route, goBack, Reducer, on
     top:0
     }
   })
-  const HandleSubmitForm = ()=>{
+
+  const HandleSubmitForm = (data:OpamProtectAddEmergencyContactProps)=>{
+    if(loading)
+    {
+      return;
+    }
     if(route?.params?.goto)
     {
+      if(contactId === "")
+      {
+    OpamProtectAddEmergencyContact({
+      ...data,
+      emergency_contact_priority:1}).then((res)=>{
+      if(res.data)
+      {
+        dispatch({type:"update",payload:{
+        creationOfDistressPin:true,
+        creationOfNextOfKin:true,
+        creationOfEmergencyPreference:true
+      }})
+      navigationRef.current?.goBack()
+      }
+    })
+      }
      return OpamProtectUpdateEmergencyContact({
       email:String(saveData.email).trim(),
       full_name:saveData.full_name,
@@ -117,12 +137,14 @@ const OpamProtectDistressContactPreferenceScreen = ({ route, goBack, Reducer, on
         creationOfDistressPin:true,
         creationOfNextOfKin:true,
         creationOfEmergencyPreference:true
-      }})
+       }})
       navigationRef.current?.goBack();
       }
     }) 
     }
-    OpamProtectAddEmergencyContact({
+
+   
+    const SaveData:OpamProtectAddEmergencyContactProps = {
       email:String(saveData.email).trim(),
       full_name:saveData.full_name,
       phone_number:String(saveData.phone_number).trim(),
@@ -131,22 +153,24 @@ const OpamProtectDistressContactPreferenceScreen = ({ route, goBack, Reducer, on
       address_line1:saveData.address_line1,
       gender:saveData.gender,
       emergency_contact_priority:1
-    }).then((res)=>{
-      if(res.data)
-      {
-        dispatch({type:"update",payload:{
-        creationOfDistressPin:true,
-        creationOfNextOfKin:true,
-        creationOfEmergencyPreference:true
-      }})
-      NavigatePop(1);
-      }
-    })
+    }
+    dispatch({
+    type: "update", payload: {
+      OpamProtectCreation:{
+      ...Reducer?.OpamProtectCreation,
+      ...SaveData
+      },
+      creationOfDistressPin:true,
+      creationOfNextOfKin:true,
+      creationOfEmergencyPreference:true
+    }
+  })
+  NavigatePop(1);
   }
 const GetProfile = ()=>{
   setFetching(true)
   OpamProtectGetUser().then((res)=>{
-   
+    setFetching(false)
     if(res.data)
     {
       if(res.data?.emergency_contacts?.length !== 0)
@@ -165,14 +189,19 @@ const GetProfile = ()=>{
         setSaveData(buildData)
         setContactId(id)
         setFetching(false)
+      }else{
+        ShowMessage("top").fail("Emergency contact found!")
+        navigationRef.current?.goBack()
       }
       // 
     }else{
       setFetching(false)
+      
     }
   })
 }
-  useEffect(()=>{
+  
+    useEffect(()=>{
     if(route?.params?.goto)
       {
       GetProfile();
@@ -231,11 +260,12 @@ initialValues={{
   gender:saveData.gender
 }}
 onSubmit={(values:FormikValues, actions:any) => {
+ 
   if(!ValidateNigerianMobile.test("0"+values.phoneNumber))
     {
     return ShowMessage("top").fail("A valid phone number is require.")
     }
-  setSaveData({
+  const data:OpamProtectAddEmergencyContactProps = {
     full_name:values.name,
     relationship:values.relationShip,
     phone_number:"+"+dailCode+values.phoneNumber,
@@ -243,12 +273,14 @@ onSubmit={(values:FormikValues, actions:any) => {
     preferred_contact_method:"SMS",
     address_line1:values.address_line1,
     gender:values.gender
-  });
+  }
+
+  setSaveData(data);
   if(!route?.params?.goto)
     {
   HandleAnimation(1)
     }else{
-      HandleSubmitForm()
+      HandleSubmitForm(data)
     }
 }}
 validationSchema={FormSchema}

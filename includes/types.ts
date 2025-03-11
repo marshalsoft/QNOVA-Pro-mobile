@@ -1,6 +1,7 @@
 import { ViewStyle } from 'react-native';
 import { BillersPropItemProp } from '../screens/dashboard/home/components/billPayment';
 import { CheckAvailablityTypes } from './useBiometricHook';
+import { OpamProtectAddEmergencyContactProps } from './http.hooks';
 
 /* eslint-disable prettier/prettier */
 export interface UserDataModel {
@@ -86,7 +87,9 @@ export interface UserDataModel {
     bankCode:string;
   },
   distress_pin:string;
+  OpamProtectCreation:OpamProtectAddEmergencyContactProps;
 }
+
 export type ThemeProp = "light" | "dark" | "system";
 export interface PreferenceProps {
   notifications?: NotificationsProps[];

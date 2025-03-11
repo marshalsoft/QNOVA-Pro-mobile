@@ -14,6 +14,7 @@ export interface OpamProtectAddEmergencyContactProps {
     full_name?:string;
     relationship?:string;
     phone_number?:string;
+    distress_pin?:string;
     email?:string;
     preferred_contact_method?:"SMS"|"EMAIL"|"PHONE_NUMBER";
     contact_id?:string;
@@ -916,13 +917,13 @@ const useHttp = () => {
         distress_pin: string;
         preferred_emergency_action?:string;
     }
-    const OpamProtectCreatePassword  = (props:OpamProtectCreatePasswordProps)=>{
+    const OpamProtectCreatePassword  = (props:any)=>{
         return new Promise<APIResponse>((resolve)=>{
             setLoading(true);
             return PostDATA(`opam-protect/profile`,{
                 ...props,
                 preferred_emergency_action:"Contact bank account officer to freeze account"
-            }).then((res)=>{
+            },"image").then((res)=>{
                 setLoading(false);
                 ShowToast(res,"top");
                 resolve(res)

@@ -42,11 +42,11 @@ import { ReturnAllLetter } from "../../../includes/functions";
 import { NavigatePop } from "../../../includes/useNavigation";
 import { useDispatch } from "react-redux";
 
-const SafeWordScreen = ({ onValue, goBack }: PINScreenProp) => {
+const SafeWordScreen = ({ goBack,Reducer }: ScreenComponentType) => {
   const [recording, setRecording] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const { OpamProtectAudioUpload, loading, ShowMessage } = useHttp();
+  const { OpamProtectAudioUpload,OpamProtectCreatePassword, loading, ShowMessage } = useHttp();
   const [counter, setCounter] = useState<number>(0)
   const IWaveformRefRef = useRef<IWaveformRef>(null);
   const timer = useRef<NodeJS.Timeout>();
@@ -116,7 +116,8 @@ const StartTimer = ()=>{
         }}
         onSubmit={(values: FormikValues, actions: any) => {
           const extn = String(recordedAudio).split(".");
-          OpamProtectAudioUpload({
+          OpamProtectCreatePassword({
+            ...Reducer?.OpamProtectCreation,
             safeword: values.safeWord,
             audioFile: {
               uri: "file://"+recordedAudio,

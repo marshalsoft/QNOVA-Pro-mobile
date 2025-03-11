@@ -98,26 +98,48 @@ const OpamProtectDistressEmergecyPreferenceScreen = ({ route, goBack, Reducer, o
   })
   const HandleSubmitForm = ()=>{
     const preferred = listOfPreference.filter((a,i)=>a.selected).map((a,i)=>a.title).join(", ")
-    OpamProtectAddEmergencyContact({
-      email:String(saveData.email).trim(),
-      full_name:saveData.full_name,
-      phone_number:String(saveData.phone_number).trim(),
-      relationship:saveData.relationship,
-      preferred_contact_method:"SMS",
-      address_line1:saveData.address_line1,
-      gender:saveData.gender,
-      emergency_contact_priority:1
-    }).then((res)=>{
-      if(res.data)
-      {
-        dispatch({type:"update",payload:{
-        creationOfDistressPin:true,
-        creationOfNextOfKin:true,
-        creationOfEmergencyPreference:true
-      }})
-      NavigatePop(1)
-      }
-    })
+    // OpamProtectAddEmergencyContact({
+    //   email:String(saveData.email).trim(),
+    //   full_name:saveData.full_name,
+    //   phone_number:String(saveData.phone_number).trim(),
+    //   relationship:saveData.relationship,
+    //   preferred_contact_method:"SMS",
+    //   address_line1:saveData.address_line1,
+    //   gender:saveData.gender,
+    //   emergency_contact_priority:1
+    // }).then((res)=>{
+    //   if(res.data)
+    //   {
+    //     dispatch({type:"update",payload:{
+    //     creationOfDistressPin:true,
+    //     creationOfNextOfKin:true,
+    //     creationOfEmergencyPreference:true
+    //   }})
+    //   NavigatePop(1)
+    //   }
+    // })
+    const SaveData:OpamProtectAddEmergencyContactProps = {
+        email:String(saveData.email).trim(),
+        full_name:saveData.full_name,
+        phone_number:String(saveData.phone_number).trim(),
+        relationship:saveData.relationship,
+        preferred_contact_method:"SMS",
+        address_line1:saveData.address_line1,
+        gender:saveData.gender,
+        emergency_contact_priority:1
+    }
+    dispatch({
+    type: "update", payload: {
+      OpamProtectCreation:{
+      ...Reducer?.OpamProtectCreation,
+      ...SaveData
+      },
+      creationOfDistressPin:true,
+      creationOfNextOfKin:true,
+      // creationOfEmergencyPreference:true
+    }
+  })
+  NavigatePop(1);
   }
 
   useEffect(()=>{
@@ -151,7 +173,7 @@ const OpamProtectDistressEmergecyPreferenceScreen = ({ route, goBack, Reducer, o
 <SubTitleText>{listOfSubTitle[selectedTab]}</SubTitleText>
 </View>
 <View style={{marginVertical:15,backgroundColor:"#7B7F991A"}}>
-    <Animated.View style={AnimatedProgress} />
+  <Animated.View style={AnimatedProgress} />
 </View>
 <View style={{width:DEVICE.width,height:DEVICE.height - 150}}>
 <Animated.View 

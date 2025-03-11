@@ -38,81 +38,18 @@ value?:"SMS"|"EMAIL"|"PHONE_NUMBER";
 }
 
 const OpamProtectSafeWordScreen = ({ route, goBack, Reducer, onSuccess }: ScreenComponentType) => {
-  const dispatch = useDispatch();
-  const listOfTitle:string[] = [
-    "Distress Contact Info.",
-    "Emergency - Preferred Contact Method",
-    "Distress Contact Preference",
-    "Create Safe word",
-  ]
-  const listOfSubTitle:string[] = [
-    "Safeguarding Your Account: Give us important details for emergency",
-    "Safeguarding Your Account: Give us important details for emergency",
-    "Choose a preference that serves you best",
-    "Choose a safe word to use in time of distress"
-  ]
+  
   const {ShowMessage,loading,OpamProtectAddEmergencyContact,OpamProtectGetUser,OpamProtectUpdateEmergencyContact} = useHttp();
-  const [dailCode,setDailCode] = useState<string>("");
-  const thisViewContainer = useRef() as RefObject<View>
-  const [saveData,setSaveData] = useState<OpamProtectAddEmergencyContactProps>({
-    email:"",
-    full_name:"",
-    phone_number:"",
-    preferred_contact_method:"SMS",
-    relationship:"",
-    address_line1:"",
-    gender:"male"
-  });
+  
   useEffect(()=>{
     
   },[])
   
-  const [switchPIN,setSwitchPIN] = useState<boolean>(false);
-  const [selectedTab,setSelectedTab] = useState<number>(0);
-  const [listOfChannels,setListOfChannel] = useState<listOfChannelsProps[]>([
-    {title:"Phone Call",selected:true,value:"PHONE_NUMBER"},
-    {title:"Whatsapp",selected:false,value:"SMS"},
-    {title:"Email",selected:false,value:"EMAIL"}
-  ])
-  const [listOfPreference,setListOfPreference] = useState<listOfChannelsProps[]>([
-    {title:"Contact bank to freeze account",selected:true},
-    {title:"Contact Emergency Contact",selected:false},
-    {title:"Send live location to relevant authorities.",selected:false}
-  ])
-  const position = useSharedValue(0);
-  const animateWidth = useSharedValue(0);
-  const handleNext = ()=>{
-    HandleAnimation(2)
-  }
-  const HandleAnimation = (index:number)=>{
-    setSelectedTab(index)
-    position.value = withTiming(-(DEVICE.width * index),{duration:100})
-    animateWidth.value = withTiming(((index + 1) * (100/4)),{duration:100})
-  } 
-
-  useEffect(()=>{
-    if(route?.params?.goto)
-      {
-      return HandleAnimation(parseInt(route?.params?.goto))
-      }
-  },[route])
-  const AnimatedProgress =  useAnimatedStyle(()=>{
-    return {
-        height:2,
-        backgroundColor:"#8B1D41",
-        width:`${animateWidth.value}%`
-    }
-})
   return <AppContainer
   showNavBar
   white
   goBack={()=>{
-        if(selectedTab !== 0)
-        {
-            HandleAnimation(selectedTab - 1)
-        }else{
-        navigationRef.current?.goBack()
-        }
+  navigationRef.current?.goBack()
   }}
   >
 <View style={{backgroundColor:"#F2F2F2",flexDirection:"column",paddingVertical:24,height:DEVICE.height,borderTopRightRadius:20,borderTopLeftRadius:20,gap:8}}>
@@ -122,6 +59,7 @@ const OpamProtectSafeWordScreen = ({ route, goBack, Reducer, onSuccess }: Screen
 </View>
 <SafeWordScreen 
 goBack={()=>{}}
+Reducer={Reducer!}
 />
 </View>
 {loading && <BaseModalLoader modal />}

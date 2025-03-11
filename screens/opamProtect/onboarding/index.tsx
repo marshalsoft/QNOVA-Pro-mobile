@@ -153,7 +153,6 @@ const CreateDistressAccountScreen = ({ route, goBack, Reducer, onSuccess }: Scre
                             <SubTitleText style={{ fontSize: 12, textAlign: "left" }} >Fund your account to complete the onboarding process</SubTitleText>
                         </View>
                     </TouchableOpacity>
-                    
                     <BaseButton
                         onPress={() => {
                         NavigatePop(2)

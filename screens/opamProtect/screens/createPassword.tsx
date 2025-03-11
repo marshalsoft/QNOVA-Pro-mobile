@@ -15,9 +15,9 @@ import Svg, { Path } from "react-native-svg"
 import styled from "styled-components/native";
 import BaseButton from "../../../components/baseButton";
 import { navigationRef } from "../../../App";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { NavigatePop } from "../../../includes/useNavigation";
-import useHttp from "../../../includes/http.hooks";
+import useHttp, { OpamProtectAddEmergencyContactProps } from "../../../includes/http.hooks";
 import { BaseModalLoader } from "../../../components/baseLoader";
 interface PINScreenProp {
   onValue:(otp:string)=>void;
@@ -28,10 +28,10 @@ interface PINScreenProp {
   title?:string;
   params?:boolean;
 }
-const OpamProtectCreatePassword = ({onValue,params,status,goBack,title,subTitle}:PINScreenProp)=>{
+const OpamProtectCreatePassword = ({Reducer}:ScreenComponentType)=>{
  const thisForm = useRef() as RefObject<FormikProps<FormikValues>>
  const dispatch = useDispatch();
- const {ShowMessage,OpamProtectCreatePassword,loading} = useHttp();
+ const {ShowMessage,loading} = useHttp();
  
     return <AppContainer
     showNavBar
@@ -52,21 +52,36 @@ initialValues={{
   confirmPassword:""
 }}
 onSubmit={(values:FormikValues, actions:any) => {
- OpamProtectCreatePassword({
-  distress_pin:values.password
-}).then((res) => {
-  if (res.data) {
-     dispatch({
-  type: "update", payload: {
-    creationOfDistressPin: true
-  }
-})
-if(res.status === "success" && res.statusCode === 200)
-{
-navigationRef.current?.goBack()
+//  OpamProtectCreatePassword({
+//   distress_pin:values.password
+// }).then((res) => {
+//   if (res.data) {
+//      dispatch({
+//   type: "update", payload: {
+//     creationOfDistressPin: true
+//   }
+// })
+// if(res.status === "success" && res.statusCode === 200)
+// {
+// navigationRef.current?.goBack()
+// }
+//   }
+// })
+const SaveData:OpamProtectAddEmergencyContactProps = {
+  distress_pin:values.confirmPassword
 }
-  }
+dispatch({
+type: "update", payload: {
+OpamProtectCreation:{
+...Reducer?.OpamProtectCreation,
+...SaveData
+},
+creationOfDistressPin:true,
+// creationOfNextOfKin:true,
+// creationOfEmergencyPreference:true
+}
 })
+NavigatePop(1);
 }}
 validationSchema={FormSchema}
 >
@@ -102,11 +117,15 @@ validationSchema={FormSchema}
     </View>)}
     </Formik>
      </View>
-  </View>
+     </View>
   {loading && <BaseModalLoader />}
  </AppContainer>
 }
-export default OpamProtectCreatePassword;
+
+const MapStateToProps = (state: any) => {
+  return state;
+};
+export default connect(MapStateToProps)(OpamProtectCreatePassword);
 
 const TitleText = styled.Text`
 color: ${COLOURS.black};

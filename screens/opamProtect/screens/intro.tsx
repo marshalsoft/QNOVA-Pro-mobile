@@ -11,20 +11,27 @@ import WelcomeBackScreen from "../../loginScreen/welcomeBackScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoginScreen from "../../loginScreen";
 import { NavigateReplace } from "../../../includes/useNavigation";
+import { connect } from "react-redux";
 interface SlideItemProp {
     title: string;
     img: number;
     description: string;
 }
-const OpamProtectIntroScreen = ({ }: ScreenComponentType) => {
+const OpamProtectIntroScreen = ({ Reducer}: ScreenComponentType) => {
  const list: SlideItemProp[] = [
 {title:"Distress \"Fake\" Pin",img:require("../../../images/opamProtect/s1.png"),description:"Activate a secondary pin that accesses a secure wallet with limited funds, protecting you during forced transactions."},
 {title:"Personalized Distress Dashboard",img:require("../../../images/opamProtect/s2.png"),description:"You gain access to a dedicated dashboard separate from your regular account interface"}
 // {title:"Incognito Transfers",img:require("../../../images/opamProtect/s3.png"),description:" Send money anonymously while ensuring full compliance with all regulatory standards."}
     ];
 const [switchScreen,setSwitchScreen] = useState<"welcome"|"get-started" | null>(null);
-    const [selectedItem,setSelectedItem] = useState<SlideItemProp>(list[0])
-    return <View
+const [selectedItem,setSelectedItem] = useState<SlideItemProp>(list[0])
+ useEffect(()=>{
+if(Reducer?.isOpamProtected)
+{
+NavigateReplace(ROUTES.opamProtectManageScreen,{})
+}
+ },[Reducer])
+return <View
         style={{ flex: 1, ...DEVICE }}
         onLayout={()=>{
             Splash.hide();
@@ -94,8 +101,12 @@ const [switchScreen,setSwitchScreen] = useState<"welcome"|"get-started" | null>(
     </View>
     
 }
-export default OpamProtectIntroScreen;
 
+const MapStateToProps = (state: any) => {
+    return state;
+  };
+  export default connect(MapStateToProps)(OpamProtectIntroScreen);
+  
 const Style = StyleSheet.create({
     dot:{
         width:8,
