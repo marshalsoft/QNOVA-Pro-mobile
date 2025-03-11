@@ -59,7 +59,7 @@ import TwoFAComponent from '../../components/twoFA';
     }
   }
   useEffect(()=>{
-// alert (selectedValue)
+ 
   },[])
     return <AppContainer
     showNavBar

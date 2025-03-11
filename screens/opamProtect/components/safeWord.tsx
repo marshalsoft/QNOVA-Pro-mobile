@@ -40,6 +40,7 @@ import Animated, { Easing, withRepeat, withSequence, withTiming } from 'react-na
 import { PERMISSIONS, request } from "react-native-permissions";
 import { ReturnAllLetter } from "../../../includes/functions";
 import { NavigatePop } from "../../../includes/useNavigation";
+import { useDispatch } from "react-redux";
 
 const SafeWordScreen = ({ onValue, goBack }: PINScreenProp) => {
   const [recording, setRecording] = useState(false);
@@ -105,6 +106,8 @@ const StartTimer = ()=>{
     const granted = await request(PERMISSIONS.ANDROID.RECORD_AUDIO);
     return granted === "granted";
   }
+  
+  const dispatch = useDispatch();
   return <View style={{ backgroundColor: "#F2F2F2", flexDirection: "column", paddingVertical: 30, height: DEVICE.height, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
     <View style={{ flexDirection: "column" }}>
       <Formik
@@ -123,6 +126,12 @@ const StartTimer = ()=>{
           }).then((res) => {
             if(res.status === "success" && res.statusCode === 200)
               {
+                dispatch({
+                  type: "update", 
+                  payload: {
+                    creationOfSafeWord: true,
+                    isOpamProtected:true
+                  }})
               NavigatePop(1)
             }
           })

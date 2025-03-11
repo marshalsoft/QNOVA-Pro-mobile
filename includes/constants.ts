@@ -66,7 +66,8 @@ protectAbout:"protectAbout",
 distressContactPreference:"distressContactPreference",
 distressNextOption:"distressNext",
 protectLogs:"protectLogs",
-protectSettings:"protectSettings"
+protectSettings:"protectSettings",
+updateDistressPIN:"updateDistressPIN"
 }
 export const RELOAD = {
     wallet:"wallet",

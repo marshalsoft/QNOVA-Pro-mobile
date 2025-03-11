@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import { View,Text, TouchableOpacity, Platform, StatusBar, ScrollView, Alert, Image } from 'react-native';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { BusinessRegFormProps, ScreenComponentType, UserLoginProps } from '../../includes/types';
 import AppContainer from '../../components/appContainer';
 import { navigationRef } from '../../App';
@@ -18,9 +18,18 @@ import CloseIcon from '../../components/svgs/closeIcon';
 
   const SignUpScreen = ({route}:ScreenComponentType) => {
   const {Register,loading} = useHttp();
+  const dispatch = useDispatch()
   const [iHaveBusiness,setIhaveBusiness] = useState<boolean>(false);
   useEffect(()=>{
-    // navigationRef.current?.navigate(ROUTES.successScreen)
+    dispatch({
+      type:"update",
+      payload:{
+        creationOfDistressPin:true,
+        creationOfNextOfKin:false,
+        creationOfEmergencyPreference:false,
+        creationOfSafeWord: false,
+        isOpamProtected:false
+    }})
   },[]) 
   return <AppContainer 
     showNavBar={true}

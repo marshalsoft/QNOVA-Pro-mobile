@@ -1,4 +1,4 @@
-import React, { } from "react"
+import React, { useEffect } from "react"
 import Svg, { Path } from "react-native-svg"
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { COLOURS, DEVICE, FONTFAMILY, ROUTES, ValidateNigerianMobile, ValidateNigerianMobile2 } from "../../../includes/constants";
@@ -25,6 +25,14 @@ interface listOfChannelsProps {
 }
 
 const OpamProtectDistressLogsScreen = ({ route, goBack, Reducer, onSuccess }: ScreenComponentType) => {
+ const {GetDistressLogs} = useHttp();
+ const [page,setPage] = useState<number>(1)
+ const [listOfDistress,setListOfDistress] = useState([]);
+useEffect(()=>{
+  GetDistressLogs({}).then((res)=>{
+    // alert(JSON.stringify(res))
+  })
+},[])
   return <AppContainer
     showNavBar
     white
@@ -33,7 +41,7 @@ const OpamProtectDistressLogsScreen = ({ route, goBack, Reducer, onSuccess }: Sc
     }}
   >
     <View style={{ backgroundColor: "#F2F2F2", flexDirection: "column", paddingVertical: 24, height: DEVICE.height, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
-      <Text style={{ alignSelf: "center", color: COLOURS.black, fontSize: 20, fontFamily: FONTFAMILY.INTER.bold }}>Distress Log</Text>
+      <Text style={{ alignSelf: "center", color: COLOURS.black, fontSize: 20, fontFamily: FONTFAMILY.INTER.bold }}>Distress Logs</Text>
       <Text style={{ alignSelf: "center", color: "#7B7F99", fontSize: 12, marginTop: 10, marginBottom: 10, textAlign: "center", fontFamily: FONTFAMILY.INTER.normal, paddingHorizontal: 50 }}>All your distress logs are listed below</Text>
       <HorizontaLine />
       <View style={{ paddingHorizontal: 16, paddingVertical: 10 }} >

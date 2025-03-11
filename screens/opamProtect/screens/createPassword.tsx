@@ -63,7 +63,7 @@ onSubmit={(values:FormikValues, actions:any) => {
 })
 if(res.status === "success" && res.statusCode === 200)
 {
-NavigatePop(2);
+navigationRef.current?.goBack()
 }
   }
 })

@@ -1022,7 +1022,15 @@ const useHttp = () => {
             });
         })
     }
-
+const GetDistressLogs = (props?:any)=>{
+    return new Promise<APIResponse>((resolve)=>{
+        setLoading(true);
+        return GetDATA(`opam-protect/distress-events`,props).then((res)=>{
+            setLoading(false);
+            resolve(res)
+        });
+    })
+}
     return {
         UserLogin,
         VerifiyBusinessName,
@@ -1101,7 +1109,8 @@ const useHttp = () => {
         UserResetPassword,
         UserCreateNewPassword,
         GetOpamProtectAccountNumber,
-        LoginWithFTA
+        LoginWithFTA,
+        GetDistressLogs
     }
 };
 export default useHttp;

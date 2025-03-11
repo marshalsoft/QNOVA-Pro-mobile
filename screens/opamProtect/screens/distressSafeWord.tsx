@@ -89,37 +89,6 @@ const OpamProtectSafeWordScreen = ({ route, goBack, Reducer, onSuccess }: Screen
     position.value = withTiming(-(DEVICE.width * index),{duration:100})
     animateWidth.value = withTiming(((index + 1) * (100/4)),{duration:100})
   } 
-  const AnimStyle = useAnimatedStyle(()=>{
-    return {
-    left:position.value,
-    position:"absolute",
-    top:0
-    }
-  })
-  const HandleSubmitForm = ()=>{
-    const preferred = listOfPreference.filter((a,i)=>a.selected).map((a,i)=>a.title).join(", ")
-    OpamProtectAddEmergencyContact({
-      email:String(saveData.email).trim(),
-      full_name:saveData.full_name,
-      phone_number:String(saveData.phone_number).trim(),
-      relationship:saveData.relationship,
-      preferred_contact_method:"SMS",
-      address_line1:saveData.address_line1,
-      gender:saveData.gender,
-      emergency_contact_priority:1
-    }).then((res)=>{
-      if(res.status === "success" && res.statusCode === 200)
-      {
-        dispatch({type:"update",payload:{
-        creationOfDistressPin:true,
-        creationOfNextOfKin:true,
-        creationOfEmergencyPreference:true
-      }})
-      // NavigatePop(2);
-      navigationRef.current?.goBack()
-      }
-    })
-  }
 
   useEffect(()=>{
     if(route?.params?.goto)

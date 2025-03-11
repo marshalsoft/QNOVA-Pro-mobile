@@ -1,5 +1,5 @@
 import React, { } from "react"
-import Svg, { Path } from "react-native-svg"
+import Svg, { Path,Rect } from "react-native-svg"
 import { Text, TouchableOpacity, View } from "react-native";
 import { COLOURS, DEVICE, FONTFAMILY, ROUTES, ValidateNigerianMobile, ValidateNigerianMobile2 } from "../../../includes/constants";
 import { useState } from "react";
@@ -29,16 +29,21 @@ const OpamProtectManageScreen = ({ route, goBack, Reducer, onSuccess }: ScreenCo
   const buttons: ItemProps[] = [
     {
       title: "Distress Contact Preference", value: "0", route: ROUTES.distressContactPreference,
-      description: "Ensure emergency contact information is correct",
+      description: "Update emergency contact information.",
       icon: <ContactIcon />
     },
     {
-      title: "Distress Next Steps", value: 2, route: ROUTES.distressContactPreference, description: "Choose a preference that serves you best",
+      title: "Distress Next Steps", value: 2, route: ROUTES.distressContactPreference, description: "Update distress preferences.",
       icon: <NextIcon />
     },
     {
-      title: "Distress Log", value: "log", route: ROUTES.protectLogs, description: "Choose a preference that serves you best",
+      title: "Distress Log", value: "log", route: ROUTES.protectLogs, description: "View and filter distress logs.",
       icon: <LogIcon />
+    }
+    ,
+    {
+      title: "Distress Password", value: "password", route: ROUTES.updateDistressPIN, description: "Update your distress PIN.",
+      icon: <PasswordIcon />
     },
     // {
     //   title: "Customer Support", value: "support", route: ROUTES.protectAbout, description: "All your distress transactions",
@@ -211,4 +216,22 @@ const SettingsIcon = ({ size }: { size?: number }) => {
         fill="#8B1D41"
       />
     </Svg>
+}
+
+const PasswordIcon = ()=> {
+  return (
+    <Svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#8B1D41"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <Rect width={20} height={12} x={2} y={6} rx={2} />
+      <Path d="M12 12h.01M17 12h.01M7 12h.01" />
+    </Svg>
+  )
 }

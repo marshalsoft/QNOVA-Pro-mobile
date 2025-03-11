@@ -19,15 +19,14 @@ import { NavigatePop } from "../../../includes/useNavigation";
 
 const CreateDistressAccountScreen = ({ route, goBack, Reducer, onSuccess }: ScreenComponentType) => {
    const { ShowMessage, loading,GetOpamProtectAccountNumber } = useHttp();
-   const GetFormSteps = ()=>{
-
-   }
+   const dispatch = useDispatch();
    useEffect(()=>{
-    GetFormSteps();
     // dispatch({type:"update",payload:{
-    //     creationOfDistressPin:true,
+    //     creationOfDistressPin:false,
     //     creationOfNextOfKin:false,
-    //     creationOfEmergencyPreference:false
+    //     creationOfEmergencyPreference:false,
+    // creationOfSafeWord: false,
+    // isOpamProtected:false
     //   }})
    },[])
 
@@ -62,6 +61,8 @@ const CreateDistressAccountScreen = ({ route, goBack, Reducer, onSuccess }: Scre
                             navigationRef.current?.navigate(ROUTES.opamProtectCreatePasswordScreen)
                             }
                         }}
+                    activeOpacity={Reducer?.creationOfDistressPin?1:0}
+
                         style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                          <View style={{width:20,justifyContent:"center",alignItems:"center"}}>
                         <CreatePINIcon />
@@ -79,6 +80,7 @@ const CreateDistressAccountScreen = ({ route, goBack, Reducer, onSuccess }: Scre
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
+                    activeOpacity={Reducer?.creationOfNextOfKin?1:0}
                     disabled={!Reducer?.creationOfDistressPin}
                         onPress={() => {
                             if(!Reducer?.creationOfNextOfKin)
@@ -105,8 +107,14 @@ const CreateDistressAccountScreen = ({ route, goBack, Reducer, onSuccess }: Scre
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
+                    activeOpacity={Reducer?.creationOfSafeWord?1:0}
                    disabled={!Reducer?.creationOfEmergencyPreference}
-                        onPress={() => navigationRef.current?.navigate(ROUTES.distressSafeWord)}
+                        onPress={() => {
+                            if(!Reducer?.creationOfSafeWord)
+                            {
+                            navigationRef.current?.navigate(ROUTES.distressSafeWord)
+                            }
+                        }}
                         style={{ flexDirection: "row", alignItems: "center", gap: 10,opacity:Reducer?.creationOfEmergencyPreference?1:0.4 }}>
                        <View style={{width:20,justifyContent:"center",alignItems:"center"}}>
                         <SafeWordIcon />
@@ -116,19 +124,20 @@ const CreateDistressAccountScreen = ({ route, goBack, Reducer, onSuccess }: Scre
                         <View style={{ flex:1}}>
                             <Text style={{ color: COLOURS.black, fontSize: 14, fontWeight: "800", fontFamily: FONTFAMILY.INTER.semiBold }} >Create Safe Word</Text>
                            </View>
-                         {Reducer?.fundingOfAccount && !Reducer.creationOfSafeWord ?<TouchableOpacity >
+                         {Reducer?.creationOfEmergencyPreference && !Reducer.creationOfSafeWord ?<TouchableOpacity >
                         <Text style={{ color: COLOURS.purple, fontSize: 14, fontWeight: "800", fontFamily: FONTFAMILY.INTER.semiBold }} >You're Here!</Text>
-                        </TouchableOpacity>:Reducer?.fundingOfAccount && Reducer.creationOfSafeWord?<CheckedIcon size={20} />:null}
+                        </TouchableOpacity>:Reducer?.creationOfEmergencyPreference && Reducer.creationOfSafeWord?<CheckedIcon size={20} />:null}
                         </View>   
                             <SubTitleText style={{ fontSize: 12, textAlign: "left" }} >Choose a safe word to use in time of distress</SubTitleText>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
-                    disabled={!Reducer?.creationOfEmergencyPreference}
+                    activeOpacity={Reducer?.fundingOfAccount?1:0}
+                    disabled={!Reducer?.creationOfSafeWord}
                         onPress={() =>{
                             GetAccountNumber();
                         }}
-                        style={{ flexDirection: "row", alignItems: "center", gap: 10,opacity:Reducer?.creationOfEmergencyPreference?1:0.4 }}>
+                        style={{ flexDirection: "row", alignItems: "center", gap: 10,opacity:Reducer?.creationOfSafeWord?1:0.4 }}>
                         <View style={{width:20,justifyContent:"center",alignItems:"center"}}>
                         <EmergencyIcon />
                         </View> 
@@ -137,9 +146,9 @@ const CreateDistressAccountScreen = ({ route, goBack, Reducer, onSuccess }: Scre
                         <View style={{ flex:1}}>
                             <Text style={{ color: COLOURS.black, fontSize: 14, fontWeight: "800", fontFamily: FONTFAMILY.INTER.semiBold }} >Fund Account</Text>
                            </View>
-                        {Reducer?.creationOfEmergencyPreference && !Reducer.fundingOfAccount ?<TouchableOpacity >
+                        {Reducer?.creationOfSafeWord && !Reducer.fundingOfAccount ?<TouchableOpacity >
                         <Text style={{ color: COLOURS.purple, fontSize: 14, fontWeight: "800", fontFamily: FONTFAMILY.INTER.semiBold }} >You're Here!</Text>
-                        </TouchableOpacity>:Reducer?.creationOfEmergencyPreference && Reducer.fundingOfAccount?<CheckedIcon size={20} />:null}
+                        </TouchableOpacity>:Reducer?.creationOfSafeWord && Reducer.fundingOfAccount?<CheckedIcon size={20} />:null}
                         </View>   
                             <SubTitleText style={{ fontSize: 12, textAlign: "left" }} >Fund your account to complete the onboarding process</SubTitleText>
                         </View>
@@ -149,7 +158,7 @@ const CreateDistressAccountScreen = ({ route, goBack, Reducer, onSuccess }: Scre
                         onPress={() => {
                         NavigatePop(2)
                         }}
-                        title="Cancel"
+                        title={Reducer?.creationOfDistressPin?"Done":"Cancel"}
                     />
                 </View>
             </View>

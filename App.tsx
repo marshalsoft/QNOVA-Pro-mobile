@@ -62,6 +62,7 @@ const Stack = createSharedElementStackNavigator();
 import { usePushNotificationHook } from './includes/usePushHook';
 import { useDispatch } from 'react-redux';
 import useBiometricHook from './includes/useBiometricHook';
+import updateDistressPIN from './screens/opamProtect/screens/updateDistressPIN';
 const AppStack = () => {
   const dispatch = useDispatch();
   const {CheckAvailablity} = useBiometricHook();
@@ -703,7 +704,19 @@ const AppStack = () => {
           },
           cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
         }}
-      />       
+      />   
+      <Stack.Screen
+        component={updateDistressPIN}
+        name={ROUTES.updateDistressPIN}
+        options={{
+          headerShown: false,
+          headerTintColor: 'orange',
+          headerStyle: {
+            backgroundColor: 'transparent',
+          },
+          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }}
+      />      
     </Stack.Navigator>
   </NavigationContainer>;
 };
