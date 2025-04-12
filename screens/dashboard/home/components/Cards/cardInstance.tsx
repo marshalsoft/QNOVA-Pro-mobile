@@ -165,7 +165,7 @@ resizeMode="contain"
      </View>
  <View style={{flexDirection:"row",justifyContent:"center",alignItems:"center"}}>
 <Text style={{color:"gray",fontFamily:FONTFAMILY.INTER.medium,fontSize:20,opacity:0.4,marginTop:8}}>{"₦"}</Text>
-<Text style={{color:"black",fontFamily:FONTFAMILY.INTER.bold,fontSize:36,marginTop:5,marginHorizontal:2}}>{balanceInNaira == "0"?balanceInNaira:ReturnComma(String(balanceInNaira))}</Text>
+<Text style={{color:"black",fontFamily:FONTFAMILY.INTER.bold,fontSize:36,marginTop:5,marginHorizontal:2}}>{balanceInNaira}</Text>
 <Text style={{color:"gray",fontFamily:FONTFAMILY.INTER.medium,fontSize:20,marginTop:5}}>.{balanceInKobo}</Text>
 </View>
  <View style={{flexDirection:"row"}}>

@@ -67,7 +67,8 @@ distressContactPreference:"distressContactPreference",
 distressNextOption:"distressNext",
 protectLogs:"protectLogs",
 protectSettings:"protectSettings",
-updateDistressPIN:"updateDistressPIN"
+updateDistressPIN:"updateDistressPIN",
+updatePhoneNumber:"updatePhoneNumber"
 }
 export const RELOAD = {
     wallet:"wallet",

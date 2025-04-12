@@ -9,7 +9,7 @@ import { COLOURS, DEVICE, FONTFAMILY } from '../../includes/constants';
 import { APIResponse, ItemProps } from '../../includes/types';
 import {ImageLibraryOptions,ImagePickerResponse,Asset, launchCamera, launchImageLibrary} from 'react-native-image-picker'
 import UploadIcon from '../svgs/uploadIcon';
-import { useToast } from 'react-native-toast-notifications';
+import {pickFile} from '../../includes/filePicker.hook';
 import useHttp from '../../includes/http.hooks';
 import TrashIcon from '../svgs/trashIcon';
 import { Styles } from '../baseInput';
@@ -50,24 +50,12 @@ const BaseFilePicker = (props:BaseSelectProps)=> {
  const {ShowMessage} = useHttp();
 
  const handleFilePicker = async(fileTypes:FileTypes[])=>{
-  request(Platform.OS === "android"?
-    PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE:PERMISSIONS.IOS.PHOTO_LIBRARY,
-    {
-        title: 'File Permission',
-        message: 'QNOVA-Pro needs access to your storage to read your file.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-    }
-).then((granted)=>{
-if(granted === "granted")
-{
-  pickSingle(FilePickerOptions).then((res)=>{
+  pickFile().then((res)=>{
  console.log(res);
  setValue("");
  if(!res.size)
  {
-  props.onChange({status:"failed",message:res.copyError!});
+  props.onChange({status:"failed",message:"Oop no file selected."});
  }else{
  const fileSizeInMB = res.size / (1024 * 1024);
 if(fileSizeInMB > (props.maxFileSize * 1000)) 
@@ -77,6 +65,7 @@ if(fileSizeInMB > (props.maxFileSize * 1000))
 }else{
     var splitPath = String(res?.name).split(".");
     var extn = String(splitPath[splitPath.length - 1]).toLowerCase() as FileTypes;
+    console.log("Picker:",res);
     if(fileTypes.includes(extn))
     {
     setValue(res.name!);
@@ -88,8 +77,6 @@ if(fileSizeInMB > (props.maxFileSize * 1000))
   }
  }
   })
-}
-})
  } 
     return (<View style={{flexDirection:'column',marginBottom:10}}>
       <View

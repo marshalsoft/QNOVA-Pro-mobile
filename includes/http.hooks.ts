@@ -6,10 +6,11 @@ import { navigationRef } from '../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
-import { COLOURS, LOCALSTORAGE, ROUTES } from './constants';
+import { BASEUrl, COLOURS, LOCALSTORAGE, ROUTES } from './constants';
 import { WalletToWalletTransferProps } from '../screens/dashboard/home/components/walletTransfer';
 import { CreateNewBulkTranferProp } from '../screens/dashboard/home/components/bulkTransfer/NewBulkRequest';
 import { CreateCardPayloadProps } from '../screens/dashboard/home/components/cards/createNewCard';
+import { FileProps } from '../screens/signUpScreen/uploadDocumentsScreen';
 export interface OpamProtectAddEmergencyContactProps {
     full_name?:string;
     relationship?:string;
@@ -25,9 +26,10 @@ export interface OpamProtectAddEmergencyContactProps {
 }
 interface VerifyOTPProps {
 phone?: string; // if type is phone
-type: "email" | "phone"; // phone or email
+type: "auth-pin" | "phone" | "email" | "transaction-pin"; // phone or email
 email?: string; // if type is email
 otp:string;
+channel:"email"|"phone";
 password?:string;
 }
 const useHttp = () => {
@@ -38,7 +40,7 @@ const useHttp = () => {
         toast.show(data.message, {
             swipeEnabled: true,
             type: 'custom',
-            successColor: COLOURS.red,
+            successColor: "#00A551",
             placement: position,
             textStyle: {
                 color: COLOURS.white
@@ -46,7 +48,7 @@ const useHttp = () => {
             duration: 4000,
             animationType: 'slide-in',
             style: {
-                backgroundColor: data.data? "#00A551" : "red",
+                backgroundColor: data.status === "success" && data.statusCode === 200? "#00A551" : "red",
                 marginBottom: position === "top" ? 5 : 0,
                 marginTop: position === "bottom" ? 5 : 0,
             },
@@ -58,7 +60,7 @@ const useHttp = () => {
             toast.show(message, {
                 swipeEnabled: true,
                 type: 'custom',
-                successColor: COLOURS.red,
+                successColor: "#00A551",
                 placement: position,
                 textStyle: {
                     color: COLOURS.white
@@ -99,9 +101,6 @@ const useHttp = () => {
             return PostDATA('auth/register', data).then((res) => {
                 setLoading(false);
                 ShowToast(res, "top");
-                if (res.data?.token) {
-                    AsyncStorage.setItem(LOCALSTORAGE.accessToken, res.data.token)
-                }
                 resolve(res)
             });
         })
@@ -111,10 +110,16 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA('auth/pin-management/forgot', props).then((res) => {
                 setLoading(false);
-                ShowToast(res);
-                if (res.data || res?.errorCode == "OTP_ALREADY_SENT") {
+                if(res.statusCode === 200)
+                {
+                    ShowMessage("top").success(res.message)
+                }else{
+                    ShowMessage("top").fail(res.message)
+                }
+                if (res.status === "success") {
                     navigationRef.current?.navigate(ROUTES.forgotPasswordOTP,{message:res.message,...props});
                 }
+                
                 resolve(res)
             })
         })
@@ -124,7 +129,7 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA('auth/pin-management/forgot', props).then((res) => {
                 setLoading(false);
-                ShowToast(res,);
+                ShowToast(res,"top");
                 if (res.data) {
                     navigationRef.current?.reset({
                         index: 0,
@@ -148,20 +153,20 @@ const useHttp = () => {
             });
         })
     }
-    const VerifyEmail = (email: string) => {
+    const VerifyEmail = (props: any) => {
         return new Promise<APIResponse>((resolve) => {
             setLoading(true);
-            return PostDATA(`auth/send-verification-code`, { type: "email", email: email }).then((res) => {
+            return PostDATA(`auth/register`,props).then((res) => {
                 setLoading(false);
                 ShowToast(res, "top");
                 resolve(res)
             });
         })
     }
-    const VerifyMobileNumber = (mobileNumber: string) => {
+    const VerifyMobileNumber = (props: any) => {
         return new Promise<APIResponse>((resolve) => {
             setLoading(true);
-            return PostDATA(`auth/send-verification-code`, { type: "phone", phone: mobileNumber }).then((res) => {
+            return PostDATA(`auth/send-verification-code`, props).then((res) => {
                 setLoading(false);
                 ShowToast(res, "top");
                 resolve(res)
@@ -241,16 +246,25 @@ const useHttp = () => {
             });
         })
     }
+   
     const VerifyCACNumber = (cacNumber: string) => {
         return new Promise<APIResponse>((resolve) => {
             setLoading(true);
             return PostDATA(`identity-verification`, {
                 type: "cac",
                 cardNumber: cacNumber
-            }).then((res) => {
+            }).then((respons) => {
+                PostDATA(`user/upload-bvn-cac`, {
+                    type: "cac",
+                    cardNumber: cacNumber
+                }).then((res) => {
                 setLoading(false);
                 ShowToast(res, "top");
-                resolve(res)
+                resolve({
+                    ...res,
+                    data:respons.data
+                })
+                })
             });
         })
     }
@@ -265,9 +279,15 @@ const useHttp = () => {
                 cardNumber: props.bvn,
                 dateOfBirth: props.dob
             }).then((res) => {
+                PostDATA(`user/upload-bvn-cac`, {
+                    type: "bvn",
+                    cardNumber: props.bvn,
+                    dateOfBirth: props.dob
+                }).then((res) => {
                 setLoading(false);
                 ShowToast(res, "top");
                 resolve(res)
+                })
             });
         })
     }
@@ -282,14 +302,48 @@ const useHttp = () => {
         })
     }
 
-    const UploadFiles = (prop: any) => {
+    const UploadFiles = ({logo,cac_certificate,profileId}:{
+        logo:FileProps;
+        cac_certificate:FileProps;
+        profileId:string;}
+    ) => {
+    const formData = new FormData();
+    var myHeaders = new Headers();
+    myHeaders.append("x-api-key", "y3286wdy9132gdyv32efvy9d2egf2pdco8wtev2yekcvefcs");
+   
+    // Append all selected files to FormData
+      formData.append(`logo`, {
+        uri: logo.uri,   
+        type: logo.type,   
+        name: logo.fileName
+      });
+      formData.append(`cac_certificate`, {
+        uri: cac_certificate.uri,   
+        type: cac_certificate.type,   
+        name: cac_certificate.fileName
+      });
+      formData.append(`profileId`,profileId);
         return new Promise<APIResponse>((resolve) => {
             setLoading(true);
-            return PostDATA(`upload-onboarding-documents`, prop,"image").then((res) => {
+            AsyncStorage.getItem(LOCALSTORAGE.accessToken).then((token: any) => {
+            fetch(`${BASEUrl}upload-onboarding-documents`, {
+                method: 'POST',
+                headers: {
+                 'Authorization':`Bearer ${token}`,
+                'x-api-key':'y3286wdy9132gdyv32efvy9d2egf2pdco8wtev2yekcvefcs',
+                 'Content-Type': 'multipart/form-data',
+                },
+                body: formData,
+              }).then((res)=>res.json()).then((res)=>{
                 setLoading(false);
                 ShowToast(res, "top");
                 resolve(res)
-            });
+              }).catch((error)=>{
+                setLoading(false);
+                ShowToast({status:false,message:error.message}, "top");
+                resolve({status:false,message:error.message})
+              })
+            })
         })
     }
     const FetchBillers = (billersType: BillersType) => {
@@ -539,7 +593,10 @@ const useHttp = () => {
         return new Promise<APIResponse>((resolve) => {
             return PostDATA(`auth/pin-management/reset-login-password`, prop).then((res) => {
                 setLoading(false);
-                ShowToast(res, "top");
+                ShowToast({
+                    ...res,
+                   status: res.status === "success" && res.statusCode === 200?"success":"failed",
+                }, "top");
                 resolve(res)
             });
         })
@@ -1010,8 +1067,11 @@ const useHttp = () => {
                 if (res.data) {
                     dispatch({ type: "update", payload: res.data.user });
                     AsyncStorage.setItem(LOCALSTORAGE.userData, JSON.stringify(res.data.user));
+                    if(res.data.tokens)
+                    {
                     AsyncStorage.setItem(LOCALSTORAGE.accessToken, res.data.tokens.accessToken);
                     AsyncStorage.setItem(LOCALSTORAGE.refreshToken, res.data.tokens.refreshToken);
+                    }
                     navigationRef.current?.reset({
                         index:0,
                         routes:[

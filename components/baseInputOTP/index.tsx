@@ -25,6 +25,7 @@ const BaseInputOTP = (props:BaseInputOTPProps)=> {
     const [show,setShow] = useState<boolean>(false)
   const [otp,setOTP] = useState<string[]>(['','','','','','']);
   return (<View style={{flexDirection:'column',marginBottom:10,alignItems:'center'}}>
+     <Text style={{fontSize:12,width:"100%",color:"#444"}}>{props.label}</Text>
      <OTPTextView
      inputCount={6}
      textInputStyle={{borderColor:COLOURS.purple,borderWidth:0,borderRadius:8,width:40}}

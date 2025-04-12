@@ -108,7 +108,7 @@ marginTop:16
 }}
 >
 <Text style={{color:"rgba(255,255,255,1)",fontWeight:"500",fontSize:20,fontFamily:FONTFAMILY.INTER.normal}}>{CURRENCIES.Naira.Symbol}</Text>
-<Text style={{color:"rgba(255,255,255,1)",fontWeight:"700",fontSize:35,fontFamily:FONTFAMILY.INTER.normal}}>{toggle?ReturnMaskAll(balance,true):ReturnComma(balance)}</Text>
+<Text style={{color:"rgba(255,255,255,1)",fontWeight:"700",fontSize:35,fontFamily:FONTFAMILY.INTER.normal}}>{toggle?ReturnMaskAll(balance,true):balance}</Text>
 <Text style={{color:"rgba(255,255,255,1)",fontWeight:"500",fontSize:20,fontFamily:FONTFAMILY.INTER.normal}}>.{toggle?ReturnMaskAll(sub,true):sub}</Text>
 <TouchableOpacity 
 style={{paddingLeft:5}}

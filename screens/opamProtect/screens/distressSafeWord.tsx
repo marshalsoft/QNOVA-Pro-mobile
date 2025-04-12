@@ -54,7 +54,7 @@ const OpamProtectSafeWordScreen = ({ route, goBack, Reducer, onSuccess }: Screen
   >
 <View style={{backgroundColor:"#F2F2F2",flexDirection:"column",paddingVertical:24,height:DEVICE.height,borderTopRightRadius:20,borderTopLeftRadius:20,gap:8}}>
 <View style={{flexDirection:"column"}}>
-<TitleText  >Create Safe word</TitleText>
+<TitleText >Create Safe word</TitleText>
  <Text style={{alignSelf:"center",color:"#7B7F99",fontSize:12,marginTop:10,marginBottom:20,textAlign:"center",fontFamily:FONTFAMILY.INTER.bold,paddingHorizontal:10}}>Choose a safe word to use in time of distress</Text>
 </View>
 <SafeWordScreen 

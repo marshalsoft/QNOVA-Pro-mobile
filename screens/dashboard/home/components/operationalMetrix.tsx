@@ -43,7 +43,15 @@ export const OperationalMetrixComponets = ()=>{
         useShadowColorFromDataset: false // optional
       };
     return  <View  style={{flexDirection:"column"}}>
+      <View  style={{flexDirection:"row"}}>
+   <View style={{flex:1}}>
   <Text style={{color:"rgba(255,255,255,0.5)",fontSize:14,fontFamily:FONTFAMILY.INTER.normal,paddingHorizontal:16}}>Operational Metrics</Text>
+  </View>
+  <View style={{flexDirection:"row",justifyContent:"flex-end",alignItems:"flex-end"}}>
+    <ExclamationIcon />
+  <Text style={{color:"rgba(255,255,255,0.5)",fontSize:12,marginLeft:5,paddingRight:20,fontFamily:FONTFAMILY.INTER.normal,textAlign:"right"}}>No data available yet</Text>
+  </View>
+  </View>
   <ScrollView 
     horizontal
     pagingEnabled
@@ -185,3 +193,26 @@ gap:10
       </Svg>
     )
   }
+
+
+export const ExclamationIcon=()=>{
+  return (
+    <Svg
+      width={19}
+      height={18}
+      viewBox="0 0 19 18"
+      fill="none"
+    >
+      <Path
+        d="M9.5 12.333h.007M9.5 5.666v4.167m8.334-.834A8.333 8.333 0 101.167 9a8.333 8.333 0 0016.667 0z"
+        stroke="#FFCD3D"
+        strokeOpacity={0.5}
+        strokeWidth={1.25}
+        strokeMiterlimit={10}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  )
+}
+

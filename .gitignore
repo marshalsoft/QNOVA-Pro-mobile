@@ -33,6 +33,11 @@ local.properties
 *.hprof
 .cxx/
 *.keystore
+*.zip
+*.archive
+**/node_modules/
+**/*.apk
+**/*.abs
 !debug.keystore
 
 # node.js

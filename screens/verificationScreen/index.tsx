@@ -1,6 +1,6 @@
 import { ScrollView, Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { ScreenComponentType } from "../../includes/types";
-import { COLOURS, DEVICE, FONTFAMILY, ROUTES, ValidateNigerianMobile, ValidateNigerianMobile2 } from "../../includes/constants";
+import { COLOURS, DEVICE, FONTFAMILY, passwordRules, ROUTES, ValidateNigerianMobile, ValidateNigerianMobile2 } from "../../includes/constants";
 import { useState } from "react";
 import AppContainer from "../../components/appContainer";
 import AppStyles from "../../includes/styles";
@@ -14,21 +14,17 @@ import BaseInputMobile from "../../components/baseInputMobile";
 import useHttp from "../../includes/http.hooks";
 import { navigationRef } from "../../App";
 import { BaseModalLoader } from "../../components/baseLoader";
-import { usePushNotificationHook } from "../../includes/pushNotification";
-import useShowToastMsg from "../../includes/useShowToastMsg";
+import { getUniqueId, getManufacturer,getBundleId } from 'react-native-device-info';
+import publicIP from 'react-native-public-ip';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const FormSchemaEmail = y.object({
     // email:y.string().required('Please enter your email address.').email('A valid email address is required.').max(100)
-    data:y.string().required('Required email or phone number.').max(100)
+    data:y.string().required('Required email or phone number.').max(100),
+    password:y.string().required('New password is required.').required('A strong password is required').matches(passwordRules, { message: 'Please create a stronger password.'}),
+    confirmPassword:y.string().oneOf([y.ref('password')], 'Passwords must match')
 });
-const FormSchemaPhoneNumber = y.object({
-    phoneNumber:y.string().min(10,"10 digits is required.").required('Phone number is required.')//.matches(ValidateNigerianMobile2, { message: 'A valid mobile number is required.'})
-});
+
 const VerificationScreen = ({ }: ScreenComponentType) => {
-    const [selected,setSelected] = useState<number>(0)
-    const [flag,setFlag] = useState<string>("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAT4AAACfCAMAAABX0UX9AAAAMFBMVEUBh1L///8FilUAiEwqf1gCiE/l5eXv/fgIjVgAhVAAjFAug1z9/P0Fi1LZ6eLv//ciup9sAAABuklEQVR4nO3SyXECARAEweUS7AH4761ALlRoXlkedEYvj/NIz21//Qz12rfnzKrHcl7W5f9bb5f9fhrqvV9uA5s+cOchvuV2ud6PGb3jfh3kG9H745vRO52m+JYVXwlfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpfCl8KXwpf6su3jPh9+Y4ZvePLN+G3LlN86+2yj73v/eEbGfXBe5xHem7762eo1749Z1Y9fgF2nG32nRewWgAAAABJRU5ErkJggg==");
-    const [otp,setCode] = useState<string>("+234");
-    const [isMobileNumber,setIsMobileNumber] = useState<boolean>(false);
-    
    const {VerifyMobileNumber,VerifyEmail,loading,ShowMessage} = useHttp()
    function checkEmailOrMobile(data:string) {
     // Regular expression for a basic email pattern
@@ -63,76 +59,36 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
     <View style={{flexDirection:"column",paddingHorizontal:16}}>
     <Text style={{alignSelf:"center",color:COLOURS.black,fontSize:20,fontFamily:FONTFAMILY.INTER.medium}}>Let's get started</Text>
      <Text style={{alignSelf:"center",color:"#7B7F99",fontSize:14,marginTop:10,marginBottom:20,textAlign:"center",fontFamily:FONTFAMILY.INTER.normal,width:"80%"}}>Please provide your phone number or email address.</Text>
-      <View style={{height:1,backgroundColor:COLOURS.gray100,marginVertical:20}} ></View>
-        {/* <View style={{flexDirection:"row",height:50,backgroundColor:"#7B7F991A",borderRadius:16,padding:5}}>
-            <TouchableOpacity 
-            onPress={()=>setSelected(0)}
-            style={{flex:1,justifyContent:"center",alignItems:"center",borderRadius:12,backgroundColor:selected === 0?COLOURS.white:"transparent"}}
-            >
-                <Text style={{fontFamily:FONTFAMILY.INTER.normal,color:selected === 0?COLOURS.purple:COLOURS.gray64,fontSize:14}}>Phone number</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-             onPress={()=>setSelected(1)}
-            style={{flex:1,justifyContent:"center",alignItems:"center",borderRadius:12,backgroundColor:selected !== 0?COLOURS.white:"transparent"}}
-            >
-                <Text style={{fontFamily:FONTFAMILY.INTER.normal,color:selected !== 0?COLOURS.purple:COLOURS.gray64,fontSize:14}}>Email Address</Text>
-            </TouchableOpacity>
-        </View> */}
-        {/* {selected === 0?<Formik
-    initialValues={{
-      phoneNumber:"",
-      code:"" 
-    }}
-    onSubmit={(values:FormikValues, actions:any) => {
-    VerifyMobileNumber(values.code+parseInt(values.phoneNumber)).then((res)=>{
-      if(res.errorCode === "USER_ALREADY_EXISTS" || res.message.includes("cannot"))
-    {
-        navigationRef.current?.reset({
-            index:0,
-            routes:[{
-                name:ROUTES.loginScreen
-            }]
-            })  
-    }else if(res.data)
-    {
-        navigationRef.current?.navigate(ROUTES.otpScreen,{
-        type: "phone",
-        phone:values.code+parseInt(values.phoneNumber)
-        })
-    }
-    });
-    }}
-    validationSchema={FormSchemaPhoneNumber}
-    >
-    {({values,handleChange,setFieldValue,handleSubmit,errors,isValid,touched})=>(
-    <View style={{flexDirection:"column",marginTop:16}} >
-        <BaseInputMobile
-        placeholder="801 234 5678"
-        onValueChange={(d)=>{
-          setFieldValue("phoneNumber",d);
-        }}
-        onCode={(code)=>{
-            setFieldValue("code",code);
-        }}
-        label='Phone   Number'
-        value={ReturnMobile(values.phoneNumber!)}
-        errorMessage={touched.phoneNumber && errors.phoneNumber}
-        />
-        <BaseButton 
-        title="Continue"
-        onPress={handleSubmit}
-        />
-    </View>)}
-    </Formik>: */}
     <Formik 
     initialValues={{
       data:"",
-      code:""
+      code:"",
+      password:"",
+      confirmPassword:""
     }}
     onSubmit={(values:FormikValues, actions:any) => {
+      publicIP().then(ip => { 
+        getUniqueId().then((uId)=>{
+          getManufacturer().then((manufacturer)=>{
+        const data = {
+          password:values.confirmPassword,
+          deviceId:uId,
+          deviceName:manufacturer,
+          ipAddress:ip,
+          playerId:getBundleId(),
+          location:"-"
+          }
+        AsyncStorage.setItem("password",values.confirmPassword);
         if(checkEmailOrMobile(values.data) == "email"){
-        VerifyEmail(String(values.data).trim()).then((res)=>{
-           if(res.data)
+        VerifyEmail({
+          keyContactIdentity:{
+            type:"email",
+            email:String(values.data).toLowerCase().trim(),
+            password:values.confirmPassword
+          },
+          ...data
+        }).then((res)=>{
+           if(res.status === "success" && res.statusCode == 200)
            {
             navigationRef.current?.navigate(ROUTES.otpScreen,{
                 type: "email",
@@ -152,7 +108,12 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
             ShowMessage().fail("Invalid phone number")
             return;
         }
-        VerifyMobileNumber(values.code+parseInt(values.data)).then((res)=>{
+        VerifyMobileNumber({
+          keyContactIdentity:{
+                type:"phone",
+                phone:values.code+parseInt(values.data),
+                password:values.confirmPassword
+            },...data}).then((res)=>{
             if(res.errorCode === "USER_ALREADY_EXISTS" || res.message.includes("cannot"))
           {
               navigationRef.current?.reset({
@@ -161,7 +122,7 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
                       name:ROUTES.loginScreen
                   }]
                   })  
-          }else if(res.data)
+          }else  if(res.status === "success" && res.statusCode == 200)
           {
               navigationRef.current?.navigate(ROUTES.otpScreen,{
               type: "phone",
@@ -170,7 +131,9 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
           }
           });
     }
-      
+  })
+})
+})
     }}
     validationSchema={FormSchemaEmail}
     >
@@ -178,6 +141,7 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
     <View style={{flexDirection:"column",marginTop:16}} >
         {checkEmailOrMobile(values.data) == "mobile"?<BaseInputMobile
         placeholder="801 234 5678"
+        style={{marginBottom:5}}
         onValueChange={(d)=>{
           setFieldValue("data",d);
         }}
@@ -190,6 +154,7 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
         errorMessage={touched.data && errors.data}
         />:<BaseInput
         autoCapitalize="none"
+        style={{marginBottom:5}}
         focus={checkEmailOrMobile(values.data) == "email"}
         value={values.data}
         type={checkEmailOrMobile(values.data) == "mobile"?'mobile':'email-address'}
@@ -201,6 +166,30 @@ const VerificationScreen = ({ }: ScreenComponentType) => {
         max={checkEmailOrMobile(values.data) == "mobile"?10:50}
         errorMessage={touched.data && errors.data}
         />}
+        <BaseInput
+        style={{marginBottom:5}}
+        value={values.password}
+        type={'visible-password'}
+        onChange={(d)=>{
+          setFieldValue("password",d);
+        }}
+        label='Enter your password'
+        placeholder='Enter your password'
+        max={50}
+        errorMessage={touched.password && errors.password}
+        />
+        <BaseInput
+        style={{marginBottom:5}}
+        value={values.confirmPassword}
+        type={'visible-password'}
+        onChange={(d)=>{
+          setFieldValue("confirmPassword",d);
+        }}
+        label='Confirm your password'
+        placeholder='Confirm your password'
+        max={50}
+        errorMessage={touched.confirmPassword && errors.confirmPassword}
+        />
         <BaseButton
         title="Continue"
         onPress={handleSubmit}

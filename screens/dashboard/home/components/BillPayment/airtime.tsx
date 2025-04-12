@@ -1,6 +1,6 @@
 import { ScrollView, Switch, Text, TouchableOpacity, View } from "react-native"
-import { COLOURS, DEVICE, FONTFAMILY, ValidateNigerianMobile } from "../../../../../includes/constants";
-import { useState } from "react";
+import { COLOURS, DEVICE, FONTFAMILY, ROUTES, ValidateNigerianMobile } from "../../../../../includes/constants";
+import { useEffect, useState } from "react";
 import BaseInput from "../../../../../components/baseInput";
 import BaseSelect from "../../../../../components/baseSelect";
 import { UserDataModel } from "../../../../../includes/types";
@@ -28,6 +28,9 @@ interface AirtimeComponentProps {
 }
 const AirtimeComponent = (props:AirtimeComponentProps)=>{
 const [selected,setSelected] = useState<number>(0);
+useEffect(()=>{
+   
+},[])
 const {VerifyAirtimeNumber,loading,ShowMessage} = useHttp();
 return <View 
  style={{backgroundColor:"#F2F2F2",justifyContent:"flex-start",flexDirection:"column",padding:24,borderTopRightRadius:20,borderTopLeftRadius:20}}
@@ -46,7 +49,7 @@ return <View
                 <Text style={{fontFamily:FONTFAMILY.INTER.normal,color:selected !== 0?COLOURS.purple:COLOURS.gray64,fontSize:14}}>To Other Numbers</Text>
             </TouchableOpacity>
 </View>
-{selected === 0?<Formik
+{selected === 0?props.userData?.phone?<Formik
 initialValues={{
    amount: "",
    walletId: "",
@@ -165,7 +168,15 @@ style={{marginTop:20}}
 </ScrollView>
 
 </View>)}
-</Formik>:null}
+</Formik>:<View style={{height:DEVICE.height-200,padding:20,flexDirection:"column",justifyContent:"center",alignItems:"center",gap:20}}>
+   <ExclamationWarningIcon />
+   <Text style={{textAlign:"center",fontSize:12}}>Your phone number is not found in our records.</Text>
+   <Text>Please update your phone number.</Text>
+      <BaseButton onPress={()=>{
+         navigationRef.current?.navigate(ROUTES.updatePhoneNumber)
+      }} title="Update Phone Number" />
+      <View style={{height:120}} />
+</View>:null}
 {selected === 1?<Formik
 initialValues={{
    phone:"",
@@ -184,7 +195,7 @@ const data = {
  amount: parseFloat(String(values.amount).replace(/[, ]/g,"")),
  walletId: values.walletId
 }
-VerifyAirtimeNumber(props?.userData.phone).then((res)=>{
+VerifyAirtimeNumber(data.meta.phone).then((res)=>{
    if(res.data && res.data?.isValid)
    {
       if(String(props.network.serviceType).toLowerCase().includes(String(res.data?.isp?.provider).toLowerCase()))
@@ -296,3 +307,25 @@ font-family:${FONTFAMILY.INTER.normal};
 font-size: 14px;
 font-weight: 600;
 `;
+import * as React from "react"
+import Svg, { Circle, Path } from "react-native-svg"
+import { navigationRef } from "../../../../../App";
+
+export const ExclamationWarningIcon = ()=>{
+  return (
+    <Svg
+      viewBox="0 0 24 24"
+      width={64}
+      height={64}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <Circle cx={12} cy={12} r={10} stroke="red" />
+      <Path stroke="red" d="M12 8L12 12" />
+      <Path stroke="red" d="M12 16L12 16" />
+    </Svg>
+  )
+}

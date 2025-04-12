@@ -94,11 +94,19 @@ const OtpScreen = ({route}: ScreenComponentType) => {
        onPress={()=>{
         if(route?.params?.email)
         {
-            VerifyEmail(String(route?.params.email).trim()).then((res)=>{
+            VerifyEmail({
+                email:String(route?.params.email).trim(),
+                type:"email",
+                password:route?.params.password
+            }).then((res)=>{
                 handleCount();
             })
         }else{
-            VerifyMobileNumber(route?.params?.phone).then((res)=>{
+            VerifyMobileNumber({
+                type:"phone",
+                ...route?.params?.phone,
+                password:route?.params.password
+            }).then((res)=>{
                 handleCount();
             })
         }

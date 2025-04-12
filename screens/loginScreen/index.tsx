@@ -31,6 +31,7 @@ import PushNotificationPermission from '../dashboard/home/components/pushNotific
 import { ChatIcon } from '../../components/svgs/chatIcon';
 import { ChatButton } from '../../components/customerSupport/chat';
 import TwoFAComponent from '../../components/twoFA';
+import {pickFile} from '../../includes/filePicker.hook';
   const LoginScreen = ({route}:ScreenComponentType) => {
   const dispatch = useDispatch();
   const [selected,setSelected] = useState<number>(0)
@@ -80,6 +81,20 @@ import TwoFAComponent from '../../components/twoFA';
     <View style={{flexDirection:"column",paddingHorizontal:16,minHeight:DEVICE.height}}>
     <Text style={{alignSelf:"center",color:COLOURS.black,fontSize:20,fontFamily:FONTFAMILY.INTER.medium}}>User login</Text>
      <Text style={{alignSelf:"center",color:"#7B7F99",fontSize:14,marginTop:10,marginBottom:20,textAlign:"center",fontFamily:FONTFAMILY.INTER.normal,width:"80%"}}>Please provide your phone number or email address and password to login.</Text>
+     {/* <TouchableOpacity 
+     onPress={async()=>{
+      // test for native lib
+      pickFile().then((res)=>{
+        console.log('Selected file:', res);
+        Alert.alert("test",JSON.stringify(res),[
+        {text:"Ok",onPress:()=>{}}
+        ],{cancelable:true});
+      })
+     }}
+     style={{padding:10,backgroundColor:"red",flexDirection:"row",justifyContent:"center"}}
+     >
+      <Text style={{color:"white"}}>File Picker</Text>
+     </TouchableOpacity>  */}
       <View style={{height:1,backgroundColor:COLOURS.gray100,marginVertical:20}} ></View>
       <Formik 
     initialValues={{

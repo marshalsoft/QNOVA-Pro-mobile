@@ -85,7 +85,10 @@ const initialState: UserDataModel = {
     accountNumber:"",
     bankCode:""
   },
-  distress_pin:""
+  distress_pin:"",
+  OpamProtectCreation:{
+    
+  }
 };
 
 const AppReducer = (state = initialState, action: any) => {

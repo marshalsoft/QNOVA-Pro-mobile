@@ -115,6 +115,10 @@ export function RemoveSpecialCharaters(d: string) {
               .then((res)=>res.json())
               .then((result: APIResponse) => {
                 console.log(`${BASEUrl}${url}`, '| response->', result);
+                if(result.data?.tokens)
+                  {
+                    AsyncStorage.setItem(LOCALSTORAGE.accessToken, result.data.tokens.accessToken);
+                  }
                 resolve(result);
               }).catch(error => {
                 console.log(error);

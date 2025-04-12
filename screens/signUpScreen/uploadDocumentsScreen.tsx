@@ -1,13 +1,10 @@
 import React, { RefObject, useEffect, useRef } from 'react';
-import { View,Text, TouchableOpacity, Platform, StatusBar, ScrollView, Alert, Image, Keyboard } from 'react-native';
+import { View,Text, TouchableOpacity, Platform, StatusBar, ScrollView, Alert, Image, Keyboard, DeviceEventEmitter } from 'react-native';
 import { connect } from 'react-redux';
 import { ItemProps, ScreenComponentType, UserDataModel, UserLoginProps } from '../../includes/types';
-import AppContainer from '../../components/appContainer';
-import { navigationRef } from '../../App';
-import BaseInput from '../../components/baseInput';
-import TopSection from '../../components/topSection';
-import Card from '../../components/card';
-import { COLOURS, DEVICE, FONTFAMILY, ROUTES } from '../../includes/constants';
+import { getUniqueId, getManufacturer,getBundleId } from 'react-native-device-info';
+import publicIP from 'react-native-public-ip';
+import { COLOURS, DEVICE, FONTFAMILY, LISTENERS, ROUTES } from '../../includes/constants';
 import BaseButton from '../../components/baseButton';
 import useHttp from '../../includes/http.hooks';
 import AppStyles from '../../includes/styles';
@@ -21,6 +18,7 @@ import { SelectModal } from '../../components/baseSelect';
 import { FormProps } from './businessDetails';
 import BaseFilePicker from '../../components/baseFilePicker';
 import { BaseModalLoader } from '../../components/baseLoader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const FormSchema = y.object({
   logo:y.string().required('Logo is required.'),
   cacCertificate:y.string().required('CAC certificate is required.')
@@ -29,26 +27,27 @@ export interface FormScreenProp {
   onValues:(formData:FormProps)=>void;
   value:FormProps;
   Reducer:UserDataModel;
+  route?:any;
+  onSuccess?:(message:string)=>void;
 }
-interface FileProps {
+export interface FileProps {
   uri: string;
-  name: string;
-  type: string;
-  error?: string;
+  fileName:string;
+  type:string;
 }
   const UploadDocumentScreen = (props:FormScreenProp) => {
-  const {UploadFiles,loading,ShowMessage} = useHttp();
+    const [loading,setLoading] = useState<boolean>(false)
+  const {UploadFiles,ShowMessage,CreateAccount} = useHttp();
   const [logoProps,setLogoProps] = useState<FileProps>({
     uri:"",
-    name:"",
+    fileName:"",
     type:""
   });
   const [cacCertificateProps,setCacCertificateProps] = useState<FileProps>({
     uri:"",
-    name:"",
+    fileName:"",
     type:""
   });
-  const thisDocForm = useRef() as RefObject<FormikProps<FormikValues>>;
     useEffect(()=>{
       if(props.value?.logo)
       {
@@ -56,6 +55,8 @@ interface FileProps {
         // thisDocForm.current?.setFieldValue("cacCertificate",props.value?.cacCertificate);
       }
       },[props.value?.logo])
+
+     
   return <View 
   style={{width:DEVICE.width,height:DEVICE.height - 240,flexDirection:"column"}}
   >
@@ -70,12 +71,12 @@ interface FileProps {
       {
         setLogoProps({
           uri: String(d?.data.uri),
-          name:String(d?.data.name),
+          fileName:String(d?.data.name),
           type:String(d?.data.type),  
         });
       }
     }}
-    errorMessage={logoProps.error}
+    errorMessage={""}
     />
     <BaseFilePicker
     fileTypes={["png","jpeg","jpg"]}
@@ -87,12 +88,12 @@ interface FileProps {
         {
       setCacCertificateProps({
         uri: String(d?.data.uri),
-        name:String(d?.data.name),
+        fileName:String(d?.data.name),
         type:String(d?.data.type),  
       });
         }
     }}
-    errorMessage={cacCertificateProps.error}
+    errorMessage={""}
     />
     <BaseButton 
      onPress={()=>{
@@ -104,17 +105,28 @@ interface FileProps {
         {
          return ShowMessage("top").fail("CAC certificate is reqiured")
         }
+        setLoading(true)
         UploadFiles({
           logo:logoProps,
           cac_certificate:cacCertificateProps,
-          profileId:props.value.cacNumber
+          profileId:props.value.cacNumber!
         }).then((res)=>{
-          if(res.data)
+          setLoading(false);
+          if(res.status === "success" && res.statusCode == 200)
           {
-            props.onValues({
-              logo:logoProps.name,
-              cacCertificate:cacCertificateProps.name,
-            })
+            DeviceEventEmitter.emit(LISTENERS.createAccountForms,{
+              formData:props.value,
+              createAccountFormList:{
+                BusinessDetails:{status:"valid"},
+                KeyContactDetails:{status:"valid"},
+                UploadDocuments:{status:"valid"}
+            }});
+            if(props.onSuccess)
+              {
+              props.onSuccess(res.message)
+              }
+          }else{
+            setLoading(false)
           }
         })
      }}

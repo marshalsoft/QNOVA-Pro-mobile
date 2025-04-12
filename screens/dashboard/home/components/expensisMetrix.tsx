@@ -16,6 +16,7 @@ import {
   ContributionGraph,
   StackedBarChart
 } from "react-native-chart-kit";
+import { ExclamationIcon } from './operationalMetrix';
 export const ExpensisMetrixComponets = ()=>{
     const [list,setWallets] = useState<string[]>([
         ""
@@ -36,7 +37,15 @@ export const ExpensisMetrixComponets = ()=>{
         useShadowColorFromDataset: false ,
       };
     return  <View  style={{flexDirection:"column",paddingBottom:50}}>
+  <View  style={{flexDirection:"row"}}>
+   <View style={{flex:1}}>
   <Text style={{color:"rgba(255,255,255,0.5)",fontSize:14,fontFamily:FONTFAMILY.INTER.normal,paddingHorizontal:16}}>Financial Metrics</Text>
+  </View>
+  <View style={{flexDirection:"row",justifyContent:"flex-end",alignItems:"flex-end"}}>
+    <ExclamationIcon />
+  <Text style={{color:"rgba(255,255,255,0.5)",fontSize:12,marginLeft:5,paddingRight:20,fontFamily:FONTFAMILY.INTER.normal,textAlign:"right"}}>No data available yet</Text>
+  </View>
+  </View>
   <ScrollView 
     horizontal
     pagingEnabled

@@ -45,13 +45,13 @@ export interface FormProps {
 const FormSchema = y.object({
   cacNumber:y.string().required('CAC Number is required.')
 });
-import { getUniqueId, getManufacturer,getBundleId } from 'react-native-device-info';
-import publicIP from 'react-native-public-ip';
+
 import SucessScreenComponent from './sucessScreen';
 import { ReturnAllNumbers } from '../../includes/functions';
 
   const BusinessDetailsScreen = ({route,Reducer}:ScreenComponentType) => {
-  const {loading,VerifyCACNumber,CreateAccount} = useHttp();
+  const {loading,VerifyCACNumber} = useHttp();
+  const [saveAll,setSaveAll] = useState<any>();
   const [showPassword,setShowPassword] = useState<boolean>(false);
   const [showSuccess,setShowSuccess] = useState<boolean>(false);
   const [successMessage,setSuccessMessage] = useState<string>("");
@@ -106,37 +106,7 @@ import { ReturnAllNumbers } from '../../includes/functions';
     HandleNextPage(0);
    }
   },[route?.params]);
-  const HandleCreateAccount = (data:FormProps)=>{
-   
-    publicIP().then(ip => { 
-    getUniqueId().then((uId)=>{
-      getManufacturer().then((manufacturer)=>{
-    const fdata = {
-      keyContactIdentity:route?.params,
-      bvn: data?.bvn,
-      businessRegNumber:data.cacNumber, // business regNumber (cac)
-      password:data.password,
-      deviceId:uId,
-      deviceName:manufacturer,
-      ipAddress:ip,
-      playerId:getBundleId(),
-      gender:data.gender,
-      dateOfBirth: String(data.dob).replace(/[\/]/g,"-"),
-      location:data.branchAddress
-      }
-      // alert (JSON.stringify(fdata));
-      // return ;
-    CreateAccount(fdata).then((res)=>{
-    if(res.data)
-    {
-      setSuccessMessage(res.message)
-      setShowSuccess(true)
-    }
-    })
-  })
-})
-})
-  }
+
   return <View 
   style={{width:DEVICE.width,flexDirection:"column",height:DEVICE.height}}
   >
@@ -166,8 +136,8 @@ import { ReturnAllNumbers } from '../../includes/functions';
     >
   <View style={{backgroundColor:"#F2F2F2",flexDirection:"column",paddingVertical:30,height:DEVICE.height,borderTopRightRadius:20,borderTopLeftRadius:20,overflow:"hidden"}}>
   <View style={{flexDirection:"column"}}>
-      <Text style={{alignSelf:"center",color:COLOURS.black,fontSize:20,fontFamily:FONTFAMILY.INTER.medium}}>{indexPosition === 0?"Business details":indexPosition === 1?"Key contact details":"Upload Documents"}</Text>
-     <Text style={{alignSelf:"center",color:"#7B7F99",fontSize:12,marginTop:10,marginBottom:20,textAlign:"center",fontFamily:FONTFAMILY.INTER.normal,paddingHorizontal:50}}>{indexPosition === 0?"Enter your CAC number":indexPosition === 1?"Business contact Information":"To keep your account secure and verified, please upload the required documents"}</Text>
+      <Text style={{alignSelf:"center",color:COLOURS.black,fontSize:20,fontFamily:FONTFAMILY.INTER.medium}}>{indexPosition === 0?"Key contact details":indexPosition === 1?"Business details":"Upload Documents"}</Text>
+     <Text style={{alignSelf:"center",color:"#7B7F99",fontSize:12,marginTop:10,marginBottom:20,textAlign:"center",fontFamily:FONTFAMILY.INTER.normal,paddingHorizontal:50}}>{indexPosition === 0?"Business contact Information":indexPosition === 1?"Enter your CAC number":"To keep your account secure and verified, please upload the required documents"}</Text>
      <View style={{flexDirection:"row"}}>
      {["","",""].map((a,i)=><View key={i} style={{flex:1,height:2,backgroundColor:i <= indexPosition?COLOURS.purple:"transparent"}} />)}
      </View>
@@ -177,10 +147,29 @@ import { ReturnAllNumbers } from '../../includes/functions';
  <Animated.View 
     style={[{width:DEVICE.width * 3,height:DEVICE.height - 240,flexDirection:"row",position:"absolute",left:0,top:0},AnimateViewStyle]}
     >
+<KeyContactDetailsScreen 
+onValues={(formData)=>{
+  SetFormValues(formData)
+  HandleNextPage(1);
+  DeviceEventEmitter.emit(LISTENERS.createAccountForms,{
+    formData,
+    createAccountFormList:{
+      BusinessDetails:{status:"valid"},
+      KeyContactDetails:{status:"valid"},
+      UploadDocuments:{status:"selected"}
+  }}
+  );
+}}
+index={route?.params?.index}
+value={route?.params?.formData}
+onSuccess={(message)=>{
+  setSuccessMessage(message);
+}}
+/>
  <View 
       style={{width:DEVICE.width,height:DEVICE.height - 240,paddingTop:20}}
       >
-      <Formik
+  <Formik
       innerRef={thisForm}
       initialValues={{
         cacNumber:"",
@@ -201,7 +190,10 @@ onSubmit={(values:FormProps, actions:any) => {
    if(!values.verified)
  {
   VerifyCACNumber("RC"+values?.cacNumber!).then((res)=>{
-    if(res.data)
+    console.log(res)
+    // setSaveAll(res.data);
+    // return 
+    if(res.status === "success" && res.statusCode === 200)
    {
     const { 
       affiliates, 
@@ -251,7 +243,7 @@ onSubmit={(values:FormProps, actions:any) => {
       UploadDocuments:{status:"invalid"},
   }});
  }else{
-HandleNextPage(1);
+HandleNextPage(2);
 DeviceEventEmitter.emit(LISTENERS.createAccountForms,{
   formData,
   createAccountFormList:{
@@ -323,83 +315,33 @@ validationSchema={FormSchema}
      )}
 </Formik>
 </View>
-<KeyContactDetailsScreen 
-onValues={(formData)=>{
-  SetFormValues(formData)
-  HandleNextPage(2);
+<UploadDocumentScreen
+Reducer={Reducer!}
+route={route}
+onValues={(form)=>{
+  SetFormValues(form);
+}}
+value={formData}
+onSuccess={(message)=>{
+  setSuccessMessage(message)
+  setShowSuccess(true)
   DeviceEventEmitter.emit(LISTENERS.createAccountForms,{
     formData,
     createAccountFormList:{
       BusinessDetails:{status:"valid"},
       KeyContactDetails:{status:"valid"},
-      UploadDocuments:{status:"selected"}
-  }}
-  );
-}}
-index={route?.params?.index}
-value={route?.params?.formData}
-onSuccess={(message)=>{
-  setSuccessMessage(message);
-}}
-/>
-<UploadDocumentScreen
-Reducer={Reducer!}
-onValues={(form)=>{
-  SetFormValues(form);
-  setConfirmDetails(true);
-  DeviceEventEmitter.emit(LISTENERS.createAccountForms,{
-    form,
-    createAccountFormList:{
-      BusinessDetails:{status:"valid"},
-      KeyContactDetails:{status:"valid"},
       UploadDocuments:{status:"valid"}
-  }}
-  ); 
+  }}); 
 }}
-value={formData}
 />
 </Animated.View>
 </View>
 </View>
-{confirmDetails && <ConfirmDetails
-data={formData}
-Submit={()=>{
-  setShowPassword(true)
-}}
-/>}
-{showPassword && <CreateNewPasswordComponent
-onClose={()=>{
-  setShowPassword(false)
-}}
-loading={loading}
-onValue={(d)=>{
-  const data = {
-    ...formData,
-    password:d
-  }
- 
-  delete data.logo;
-  delete data.cacCertificate;
-  SetFormValues(data);
-  HandleCreateAccount(data)
-  DeviceEventEmitter.emit(LISTENERS.createAccountForms,{
-    formData:data,
-    createAccountFormList:{
-      BusinessDetails:{status:"valid"},
-      KeyContactDetails:{status:"valid"},
-      UploadDocuments:{status:"valid"}
-  }});
- // setShowPassword(false);
- 
-}}
-formData={formData}
-
-/>
-}
 </View>
 </AppContainer>
 {showSuccess && <SucessScreenComponent 
 title={successMessage}
+
 goBack={()=>{
   navigationRef.current?.reset({
     index:0,

@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "build": "cd android && ./gradlew app:assembleDebug",
-    "test": "jest"
+    "test": "jest",
+    "share":"adb shell am start -a android.intent.action.SEND -t application/vnd.android.package-archive \\ --eu android.intent.extra.STREAM /Users/admin/Desktop/apps/QNovaPro/android/app/build/outputs/apk/release/app-release.apk \\--chooser"
   },
   "dependencies": {
     "@intercom/intercom-react-native": "7.2.1",
